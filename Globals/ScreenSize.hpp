@@ -3,6 +3,6 @@
 
 namespace NAMSP_NAME
 {
-    static int widht = -1, height = -1;
+    static int WIDTH = -1, HEIGHT = -1;
     
 } // namespace NAMSP_NAME

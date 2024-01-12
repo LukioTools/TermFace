@@ -1,5 +1,6 @@
 #pragma once
 #include "../NAMSP_NAME.hpp"
+#include "Attribute.hpp"
 #include "Color.hpp"
 
 
@@ -11,12 +12,11 @@ namespace NAMSP_NAME
     public:
         Color c;
         pixel_char_t ch;
+        Attribute a;
 
 
         friend std::ostream& operator<<(std::ostream& os, const Pixel& p){
-            os <<  p.c;
-
-
+            os <<  p.c << p.a;
                 //print the shitss
             auto ptr = reinterpret_cast<const char*>(&p.ch);
             for (size_t i = 0; i < sizeof(pixel_char_t); i++)
