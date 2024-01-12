@@ -4,8 +4,28 @@
 #include <iostream>
 #include <iterator>
 #include <vector>
+#include "../Data/BitMask.hpp"
 namespace NAMSP_NAME
 {
+    struct MouseInputType
+    {
+        int x;
+        int y;
+        enum Attribute : unsigned char{
+            UP,
+            DOWN,
+            HILIGHT,
+            CTRL,
+            ALT,
+            LEFT,
+            RIGHT,
+            CENTER,
+            SCROLL,
+        };
+        BitMask<2> a;
+
+    };
+    
     class MouseInput : public EventListener<void>
     {
     private:

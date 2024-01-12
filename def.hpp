@@ -136,8 +136,6 @@ case clause:\
 #define SET_URXVT_EXT_MODE_MOUSE    1015
 #define SET_PIXEL_POSITION_MOUSE    1016
 
-#define USE_MOUSE SET_ANY_EVENT_MOUSE
-
 
 #define enable_mouse(type) ("\e[?"+     std::to_string(type)    +"h")
 #define disable_mouse(type) ("\e[?"+    std::to_string(type)    +"l")
