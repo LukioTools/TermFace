@@ -1,5 +1,6 @@
 #pragma once
 #include "Parser.hpp"
+#include <iostream>
 #include <iterator>
 #include <string>
 #include <vector>
@@ -81,11 +82,11 @@ namespace NAMSP_NAME
                         action+=vec[current_index];
                     }
                     else if (vec[current_index] == 'M') {
-                        m.a.set(MouseInputType::UP, true);
+                        m.a.set(MouseInputType::DOWN, true);
                         break;
                     }
                     else if (vec[current_index] == 'm') {
-                        m.a.set(MouseInputType::DOWN, true);
+                        m.a.set(MouseInputType::UP, true);
                         break;
                     }
                     else{
@@ -111,6 +112,8 @@ namespace NAMSP_NAME
                 
                 m.a.set(MouseInputType::ALT, iaction & 0b1000);
                 m.a.set(MouseInputType::CTRL, iaction & 0b10000);
+                //std::cout << "iaction: " << iaction << std::endl;
+                m.a.set(MouseInputType::HILIGHT, iaction & 0b100000);
                 if((iaction & 0x23) == 0x23){
                     m.a.set(MouseInputType::HOVER, true);
                 }
@@ -124,6 +127,7 @@ namespace NAMSP_NAME
 
             MouseInput::call(m);
 
+            current_index++;
             auto it = vec.begin();
             std::advance(it, current_index);
             vec.erase(vec.begin(), it);

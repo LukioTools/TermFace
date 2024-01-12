@@ -3,13 +3,18 @@
 #include <functional>
 #include <iostream>
 #include <istream>
+#include <ostream>
 #include <thread>
 #include <vector>
 #include "Parsers/Parser.hpp"
+#if defined(DEBUG)
+
 #include "Parsers/ArrowKey.hpp"
 #include "Parsers/Mouse.hpp"
 #include "Parsers/Charachter.hpp"
 #include "Parsers/InputCap.hpp"
+
+#endif
 
 namespace NAMSP_NAME
 {
@@ -23,13 +28,19 @@ namespace NAMSP_NAME
         bool run = true;
         static std::vector<Parser> parsers;
         static void input_loop(std::istream& is, InputManager& state){
+            #if defined(DEBUG)
             std::clog << "Starting input lööp!" << std::endl;
+            #endif
             while (state.run) {
                 auto c = is.get();
+                #if defined(DEBUG)
                 std::cout << "Got: " << c << std::endl;
+                #endif
                 if(c == -1){
                     std::cin.clear();
+                    #if defined(DEBUG)
                     std::clog << "Got -1... clearing...!\n";
+                    #endif
                 }
                 else{
                     state.buffer.push_back(c);
@@ -37,6 +48,8 @@ namespace NAMSP_NAME
                     for (auto& e : parsers) {
                         if(e)
                             if(e(state.buffer)){
+                                #if defined(DEBUG)
+                                                                
                                 std::clog << "Successfull parse from: ";
                                 if(e == Parsers::Mouse)
                                     std::clog << "Mouse parser!" << std::endl;
@@ -46,19 +59,29 @@ namespace NAMSP_NAME
                                     std::clog << "Characher parser!" << std::endl;
                                 if(e == Parsers::InputCap)
                                     std::clog << "InputCap parser!" << std::endl;
+                                #endif // DEBUG
+
                                 goto relööp;
                             }
                     }
                 }
             }
+            #if defined(DEBUG)
             std::clog << "Exitting input lööp!" << std::endl;
+            #endif
+
         }
         InputManager(std::istream& is = std::cin) : run_thread(input_loop, std::ref(is), std::ref(*this)) {}
         template<typename Fn>
         InputManager(Fn fn, std::istream& is) : run_thread(fn, std::ref(is), std::ref(*this)){}
         ~InputManager() {
             run = false;
+            #if defined(DEBUG)
+            std::clog << "Waiting for thread.." << std::flush;
+            #endif
+
             #if defined(InputManagerDEATTACH)
+            
             
             if(run_thread.joinable())
                 run_thread.detach();
@@ -69,7 +92,10 @@ namespace NAMSP_NAME
                 run_thread.join();
             
             #endif // InputManagerDEATTACH
-            
+            #if defined(DEBUG)
+            std::clog << " SUCCESS" << std::endl;
+            #endif
+
             
         }
     };

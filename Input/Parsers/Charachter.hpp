@@ -27,7 +27,7 @@ namespace NAMSP_NAME
             else{
                 vec.erase(vec.begin());
             }
-            std::cout << "Char parser, got: " << a << std::endl;
+            //std::cout << "Char parser, got: " << a << std::endl;
             KeyboardInput::call(a);
 
             return true;

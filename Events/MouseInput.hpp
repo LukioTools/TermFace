@@ -38,7 +38,6 @@ namespace NAMSP_NAME
                 if(e)
                     e->event(c);
         }
-        virtual void event(MouseInputType a){};
         
         MouseInput() {
             bound_inputs.push_back(this);
