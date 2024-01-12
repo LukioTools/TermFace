@@ -18,6 +18,7 @@ namespace NAMSP_NAME
                 if(e)
                     e->event(c);
         }
+
         KeyboardInput() {
             bound_inputs.push_back(this);
         }

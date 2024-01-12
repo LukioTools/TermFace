@@ -1,4 +1,5 @@
 #include "../NAMSP_NAME.hpp"
+#include <functional>
 #include <iostream>
 #include <istream>
 #include <thread>
@@ -26,9 +27,9 @@ namespace NAMSP_NAME
                     state.buffer.push_back(c);
             }
         }
-        InputManager(std::istream& is = std::cin) : run_thread(input_loop, is, *this) {}
+        InputManager(std::istream& is = std::cin) : run_thread(input_loop, std::ref(is), std::ref(*this)) {}
         template<typename Fn>
-        InputManager(Fn fn, std::istream& is) : run_thread(fn, is, *this){}
+        InputManager(Fn fn, std::istream& is) : run_thread(fn, std::ref(is), std::ref(*this)){}
         ~InputManager() {
             run = false;
             #if defined(InputManagerDEATTACH)

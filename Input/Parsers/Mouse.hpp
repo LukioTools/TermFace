@@ -98,12 +98,35 @@ namespace NAMSP_NAME
                 }
             }
 
-            
+            {
+                //parse iaction
+                char btn = iaction & 0b11;//take first 2 bits
+                if(btn == 0)
+                    m.a.set(MouseInputType::LEFT, true);
+                if(btn == 1)
+                    m.a.set(MouseInputType::CENTER, true);
+                if(btn == 2)
+                    m.a.set(MouseInputType::RIGHT, true);
+                
+                m.a.set(MouseInputType::ALT, iaction & 0b1000);
+                m.a.set(MouseInputType::CTRL, iaction & 0b10000);
+                if((iaction & 0x23) == 0x23){
+                    m.a.set(MouseInputType::HOVER, true);
+                }
+                if((iaction & 64) == 64){
+                    bool down = iaction & 0b1;
+                    m.a.set(MouseInputType::SCROLL, true);
+                    m.a.set(MouseInputType::DOWN, down);
+                    m.a.set(MouseInputType::UP, !down);
+                }
+            }
 
+            MouseInput::call(m);
 
-
-
-            return false;
+            auto it = vec.begin();
+            std::advance(it, current_index);
+            vec.erase(vec.begin(), it);
+            return true;
         };
     } // namespace Parsers
     

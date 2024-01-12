@@ -49,7 +49,7 @@
 #define underline "\e[4m"
 #define blink "\e[5m"
 //idk what this means, docs said: "set inverse/reverse mode"
-#define reverse "\e[7m"
+#define reverse_str "\e[7m"
 #define hidden "\e[8m"
 #define strike "\e[9m"
 

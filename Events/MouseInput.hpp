@@ -15,6 +15,7 @@ namespace NAMSP_NAME
             UP,
             DOWN,
             HILIGHT,
+            HOVER,
             CTRL,
             ALT,
             LEFT,
@@ -26,11 +27,18 @@ namespace NAMSP_NAME
 
     };
     
-    class MouseInput : public EventListener<void>
+    class MouseInput : public EventListener<void, MouseInputType>
     {
     private:
     public:
         static std::vector<MouseInput*> bound_inputs;
+
+        static void call(MouseInputType c){
+            for(auto& e : bound_inputs)
+                if(e)
+                    e->event(c);
+        }
+        virtual void event(MouseInputType a){};
         
         MouseInput() {
             bound_inputs.push_back(this);
