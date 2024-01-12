@@ -30,6 +30,10 @@ namespace NAMSP_NAME
             return os;
         }
 
+        bool operator!=(const Pixel& p)const {
+            return c != p.c || ch != p.ch || a != p.a;
+        }
+
         Pixel(/* args */) {}
         ~Pixel() {}
     };

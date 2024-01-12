@@ -10,6 +10,10 @@ namespace NAMSP_NAME
         unsigned char r = 0;
         unsigned char g = 0;
         unsigned char b = 0;
+
+        bool operator!=(const RGB& c)const{
+            return r != c.r || g != c.g || b != c.b;
+        }
     };
 
     struct BGColor : RGB
@@ -31,6 +35,10 @@ namespace NAMSP_NAME
     {
         BGColor bg;
         FGColor fg;
+
+        bool operator!=(const Color& c) const{
+            return c.bg != bg || c.fg != fg;
+        } 
 
         friend std::ostream& operator<<(std::ostream& os, const Color& c){
             os << c.fg << c.bg;

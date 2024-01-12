@@ -1,10 +1,11 @@
 #pragma once
-#include "../NAMSP_NAME.hpp"
-#include "../Data/Pixel.hpp"
-#include "../Globals/ScreenSize.hpp"
+#include <algorithm>
 #include <cstddef>
 #include <memory>
 #include <stdexcept>
+
+#include "../NAMSP_NAME.hpp"
+#include "../Data/Pixel.hpp"
 
 namespace NAMSP_NAME
 {
@@ -12,6 +13,9 @@ namespace NAMSP_NAME
     {
         Pixel p;
         unsigned int z_index = 0;
+        bool operator!=(const ScreenElement& e)const{
+            return p != e.p;
+        }
     };
     
     class ScreenBuffer
@@ -39,12 +43,12 @@ namespace NAMSP_NAME
         inline std::size_t size(){
             return width*height;
         }
-        inline ScreenElement& get(std::size_t index){
+        inline ScreenElement& get(std::size_t index) const{
             if(index > width*height)
                 throw std::out_of_range("ScreenBuffer::get::out of range");
             return ptr[index];
         }
-        inline ScreenElement& get(std::size_t x, std::size_t y){
+        inline ScreenElement& get(std::size_t x, std::size_t y) const{
             return get(x+y*width);
         }
 
@@ -96,22 +100,22 @@ namespace NAMSP_NAME
             ScreenElement& operator*(){
                 return parent.get(offset);
             }
-            bool operator!=(const iterator& it){
+            bool operator!=(const iterator& it) const {
                 return offset != it.offset;
             }
-            bool operator==(const iterator& it){
+            bool operator==(const iterator& it) const {
                 return offset == it.offset;
             }
-            bool operator<(const iterator& it){
+            bool operator<(const iterator& it) const {
                 return offset < it.offset;
             }
-            bool operator<=(const iterator& it){
+            bool operator<=(const iterator& it) const {
                 return offset <= it.offset;
             }
-            bool operator>(const iterator& it){
+            bool operator>(const iterator& it) const {
                 return offset > it.offset;
             }
-            bool operator>=(const iterator& it){
+            bool operator>=(const iterator& it) const {
                 return offset >= it.offset;
             }
         };
@@ -141,10 +145,6 @@ namespace NAMSP_NAME
             while(it.inc()){
 
             }
-            or
-            while(it++){
-                
-            }
         */
         struct while_iterator 
         {
@@ -156,37 +156,53 @@ namespace NAMSP_NAME
                 return *this;
             }
 
-            std::size_t operator++(){
-                return ++offset;
+            while_iterator& operator++(){
+                ++offset;
+                return * this;
             }
-            std::size_t operator++(int){
-                return offset++;
+            while_iterator& operator++(int){
+                offset++;
+                return * this;
             }
             ScreenElement& operator*(){
                 return parent.get(offset);
             }
-            bool operator!=(const while_iterator& it){
+            bool operator!=(const while_iterator& it)const{
                 return offset != it.offset;
             }
-            bool operator==(const while_iterator& it){
+            bool operator==(const while_iterator& it)const{
                 return offset == it.offset;
             }
-            bool operator<(const while_iterator& it){
+            bool operator<(const while_iterator& it)const{
                 return offset < it.offset;
             }
-            bool operator<=(const while_iterator& it){
+            bool operator<=(const while_iterator& it)const{
                 return offset <= it.offset;
             }
-            bool operator>(const while_iterator& it){
+            bool operator>(const while_iterator& it)const{
                 return offset > it.offset;
             }
-            bool operator>=(const while_iterator& it){
+            bool operator>=(const while_iterator& it)const{
                 return offset >= it.offset;
             }
-            operator bool(){
+            operator bool()const{
                 return offset < parent.size();
             }
         };
+
+        template<typename Fn>
+        void difference(Fn fn, const ScreenBuffer& sb){
+            auto hmin =     std::min(sb.height, height);
+            auto wmin =     std::min(sb.width, width);
+            for (size_t h = 0; h < hmin; h++)
+            {
+                for (size_t w = 0; w < wmin; w++)
+                {
+                    if(get(w,h) != sb.get(w,h))
+                        fn(*this, sb, w, h);
+                }
+            }
+        }
         
         
         
