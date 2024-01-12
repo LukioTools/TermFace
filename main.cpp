@@ -22,8 +22,8 @@ public:
 
 int main(int argc, char const *argv[])
 {
-    InputManager man;
     init(argc, argv);
+    InputManager man;
 
 
     while (true) {

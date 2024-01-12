@@ -47,4 +47,5 @@ namespace NAMSP_NAME
         }
     };
 
+    inline std::vector<ArrowInput*> ArrowInput::bound_inputs;
 }

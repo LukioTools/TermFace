@@ -1,4 +1,6 @@
+#pragma once
 #include "Parser.hpp"
+#include <iostream>
 #include <iterator>
 #include <vector>
 #include "../../Events/KeyboardInput.hpp"
@@ -12,8 +14,10 @@ namespace NAMSP_NAME
             if(vec.empty())
                 return false;
             auto a = vec[0];
-            if(vec.size() >= 2 && a == '\e'){
-                if(vec[0] != '\e')
+            if(a == '\e'){
+                if(vec.size() < 2)
+                    return false;
+                if(vec[1] != '\e')
                     return false;
                 
                 auto it = vec.begin();
@@ -23,6 +27,7 @@ namespace NAMSP_NAME
             else{
                 vec.erase(vec.begin());
             }
+            std::cout << "Char parser, got: " << a << std::endl;
             KeyboardInput::call(a);
 
             return true;

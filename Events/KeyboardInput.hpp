@@ -42,4 +42,5 @@ namespace NAMSP_NAME
         }
     };
 
+    inline std::vector<KeyboardInput*> KeyboardInput::bound_inputs;
 }

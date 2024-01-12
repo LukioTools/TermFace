@@ -63,4 +63,5 @@ namespace NAMSP_NAME
         }
     };
 
+    inline std::vector<MouseInput*> MouseInput::bound_inputs;
 }

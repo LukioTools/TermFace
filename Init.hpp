@@ -4,7 +4,11 @@
 #include <iostream>
 #include <unistd.h>
 #include "Globals/Termios.hpp"
-
+#include "Input/InputManager.hpp"
+#include "Input/Parsers/InputCap.hpp"
+#include "Input/Parsers/Charachter.hpp"
+#include "Input/Parsers/ArrowKey.hpp"
+#include "Input/Parsers/Mouse.hpp"
 
 namespace NAMSP_NAME
 {
@@ -16,6 +20,10 @@ namespace NAMSP_NAME
         newt = oldt;
         newt.c_lflag &= ~(ICANON | ECHO);
         tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+        InputManager::parsers.push_back(Parsers::Mouse);
+        InputManager::parsers.push_back(Parsers::ArrowKey);
+        InputManager::parsers.push_back(Parsers::Characher);
+        InputManager::parsers.push_back(Parsers::InputCap);
         return 0;
     }
 
