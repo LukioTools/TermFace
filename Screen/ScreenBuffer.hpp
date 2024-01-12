@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <cstddef>
+#include <cstring>
 #include <memory>
 #include <stdexcept>
 
@@ -21,24 +22,43 @@ namespace NAMSP_NAME
     class ScreenBuffer
     {
     private:
-        std::size_t allocm  = 0;
+        std::size_t allocn  = 0;
         std::size_t width   = 0;
         std::size_t height  = 0;
         std::unique_ptr<ScreenElement[]> ptr  = nullptr;
 
         inline bool need_to_realloc(std::size_t n_elements){
-            if(allocm < n_elements || allocm/4 >= n_elements)
+            if(allocn < n_elements || allocn/4 >= n_elements)
                 return true;
             return false;
         }
 
     public:
-        inline void alloc(std::size_t n){
+        inline ScreenElement* get(){
+            return ptr.get();
+        }
+        inline ScreenBuffer& clear(){
+            memset(ptr.get(), 0, allocn*sizeof(ScreenElement));
+            return *this;
+        }
+        inline ScreenBuffer& fill(const ScreenElement& e){
+            for (auto& a : *this)
+                a = e;
+            return *this;
+        }
+        inline ScreenBuffer& fillall(const ScreenElement& e){
+            for (size_t i = 0; i < allocn; i++)
+                ptr.get()[i] = e;
+            return *this;
+        }
+
+        inline ScreenBuffer& alloc(std::size_t n){
             if(need_to_realloc(n))
                 ptr.reset(new ScreenElement[n]());
+            return *this;
         }
-        inline void alloc(std::size_t x, std::size_t y){
-            alloc(x*y);
+        inline ScreenBuffer& alloc(std::size_t x, std::size_t y){
+            return alloc(x*y);
         };
         inline std::size_t size(){
             return width*height;
@@ -190,8 +210,12 @@ namespace NAMSP_NAME
             }
         };
 
+        while_iterator while_begin(){
+            return {0, *this};
+        }
+
         template<typename Fn>
-        void difference(Fn fn, const ScreenBuffer& sb){
+        ScreenBuffer& difference(Fn fn, const ScreenBuffer& sb){
             auto hmin =     std::min(sb.height, height);
             auto wmin =     std::min(sb.width, width);
             for (size_t h = 0; h < hmin; h++)
@@ -202,6 +226,7 @@ namespace NAMSP_NAME
                         fn(*this, sb, w, h);
                 }
             }
+            return *this;
         }
         
         

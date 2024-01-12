@@ -1,14 +1,14 @@
 
 #pragma once
-#define mv(x,y) std::cout << "\e["<< y+1 << ";"<< x+1 <<"H" ;
+#define mv(x,y) std::cout << "\e["<< y+1 << ";"<< x+1 <<"H"
 #define mv_str(x,y) "\e[" + std::to_string(y+1) + ";" + std::to_string(x+1) + "H" 
-#define clear_all_no_mouse() std::cout << "\ec" ;
-#define clear_all() std::cout << "\ec" << enable_mouse(USE_MOUSE) ;
-#define clear_scr() std::cout << "\e[2J" ;
-#define clear_row() std::cout << "\e[2K" ;
+#define clear_all_no_mouse() std::cout << "\ec"
+#define clear_all() std::cout << "\ec" << enable_mouse(USE_MOUSE)
+#define clear_scr() std::cout << "\e[2J"
+#define clear_row() std::cout << "\e[2K"
 #define clear_row_str  "\e[2K"
-#define clear_curs_eol() std::cout << "\e[0K" ;
-#define clear_curs_sol() std::cout << "\e[1K" ;
+#define clear_curs_eol() std::cout << "\e[0K"
+#define clear_curs_sol() std::cout << "\e[1K"
 
 #define alert '\a'
 
@@ -70,8 +70,8 @@
 #define set_title_static_attr(title) ("\033]30;" title "\007")
 
 #define set_title_stream(title) "\033]30;" << title << "\007"
-#define set_title(title) printf("\033]30;%s\007", title);
-#define set_title_static(title) printf("\033]30;"#title"\007");
+#define set_title(title) printf("\033]30;%s\007", title)
+#define set_title_static(title) printf("\033]30;"#title"\007")
 
 
 ///Common Private Modes
@@ -94,7 +94,7 @@ ESC[?1049l 	        disables the alternative buffer
 #define alt_buffer "\e[?1049h"
 #define norm_buffer "\e[?1049l"
 
-#define use_attr(attr) std::cout << attr;
+#define use_attr(attr) std::cout << attr
 
 //'\x41'
 #define KEY_UP     0x00415b1b
