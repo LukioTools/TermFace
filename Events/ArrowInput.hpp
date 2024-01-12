@@ -6,22 +6,28 @@
 #include <vector>
 namespace NAMSP_NAME
 {
-    typedef char KeyboardInputType;
-    class KeyboardInput : public EventListener<void, KeyboardInputType>
+    enum Direction : char{
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+    };
+    class ArrowInput : public EventListener<void, Direction>
     {
     private:
     public:
-        static std::vector<KeyboardInput*> bound_inputs;
+        static std::vector<ArrowInput*> bound_inputs;
+
         
-        static void call(KeyboardInputType c){
+        static void call(Direction c){
             for(auto& e : bound_inputs)
                 if(e)
                     e->event(c);
         }
-        KeyboardInput() {
+        ArrowInput() {
             bound_inputs.push_back(this);
         }
-        ~KeyboardInput() {
+        ~ArrowInput() {
             for (size_t i = 0; i < bound_inputs.size(); i++)
             {
                 if(bound_inputs[i] != this)
@@ -30,13 +36,13 @@ namespace NAMSP_NAME
                 std::advance(it, i);
                 bound_inputs.erase(it);
                 #if defined(EventListenerDEBUG)
-                std::clog << "KeyboardInput event listener: " << this << " unbound successfully!\n";
+                std::clog << "ArrowInput event listener: " << this << " unbound successfully!\n";
                 #endif // EventListenerDEBUG
                 
                 return;
             }
             #if defined(EventListenerDEBUG) || defined (EventListenerERRORS)
-            std::cerr << "KeyboardInput event listener: " << this << " was not unbound: did not find in vector!\n";
+            std::cerr << "ArrowInput event listener: " << this << " was not unbound: did not find in vector!\n";
             #endif // EventListenerDEBUG
         }
     };

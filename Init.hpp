@@ -7,6 +7,12 @@ namespace NAMSP_NAME
 
         return 0;
     }
+
+    inline static int deinit()
+    {
+
+        return 0;
+    }
     
 
 } // namespace NAMSP_NAME
