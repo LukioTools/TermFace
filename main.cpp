@@ -47,7 +47,7 @@ int main(int argc, char const *argv[])
             ~SomeThing() {}
         } elem;
         while (elem.run) {
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
     }
     deinit();
