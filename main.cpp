@@ -66,7 +66,5 @@ int main(int argc, char const *argv[])
         }
     }
     deinit();
-
-    std::cout << std::max(1, 0) << ':' << std::min(-1, 0) << std::endl; 
     return 0;
 }

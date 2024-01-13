@@ -11,6 +11,7 @@ namespace NAMSP_NAME
     }
         //for simple 2d applications
     inline static void flatrender(ScreenBuffer& sba, const ScreenBuffer& sbb, std::size_t x, std::size_t y){
+        std::clog << "Flatrender: " << x << ':' << y << std::endl;
         auto& a =sba.get(x,y);
         auto& b = sbb.get(x,y);
         if(b.z_index < a.z_index)

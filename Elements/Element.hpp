@@ -62,7 +62,12 @@ namespace NAMSP_NAME
         virtual Position wh(){return {width(), height()};}
         virtual Position pos(){return {posx(), posy()};}
 
-        virtual void draw(ScreenBuffer& sb){}
+        virtual void draw(ScreenBuffer& sb){
+            auto c = children();
+            if(c)
+            for (auto& e : *c)
+                e->draw(sb);
+        }
 
         virtual void color(Color col){}
         virtual Color color(){return {};}
