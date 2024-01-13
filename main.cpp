@@ -52,6 +52,7 @@ public:
 int main(int argc, char const *argv[])
 {
     init(argc, argv);
+    try
     {
         InputManager man;
         refresh_screen_size();
@@ -65,7 +66,7 @@ int main(int argc, char const *argv[])
             ' ',
         }, 0});
 
-        body.draw(render_buffer);
+        //body.draw(render_buffer);
 
 
         display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
@@ -80,6 +81,7 @@ int main(int argc, char const *argv[])
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
     }
+    catch(...){}
     deinit();
     return 0;
 }

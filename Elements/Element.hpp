@@ -108,6 +108,7 @@ namespace NAMSP_NAME
             {
                 for (size_t w = 0; w < sb.width(); w++)
                 {
+                    
                     auto& e = sb.get(h, w);
                     e.z_index = z_index();
                     e.p.c = color();
