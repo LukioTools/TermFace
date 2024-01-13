@@ -127,7 +127,6 @@ namespace NAMSP_NAME
             {
                 for (size_t w = 0; w < sb.width(); w++)
                 {
-                    std::clog << "Get: " << w << " : " << h << std::endl;
                     auto& e = sb.get(w, h);
                     e.z_index = z_index();
                     e.p.c = color();
@@ -306,10 +305,8 @@ namespace NAMSP_NAME
                 {
                     for (size_t wi = 0; wi < w; wi++)
                     {
-                        //std::clog << "Element draw: " << wi << " : " << hi << std::endl;
                         auto& e = sb.get(wi, hi);
                         if(e.z_index > z_index()){
-                            std::clog << "Skipping since bigger zindex: " << e.z_index <<'/'<<z_index() << std::endl;
                             continue;
                         }
                         e.p.c = color();
