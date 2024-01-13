@@ -47,5 +47,16 @@ namespace NAMSP_NAME
         }
     };
 
+    template<typename Fn>
+    class ArrowInputLambda : public ArrowInput
+    {
+    public:
+        Fn fn;
+        void event(Direction c) override{
+            fn(c);
+        }
+        ArrowInputLambda(Fn fn) : fn(fn){}
+    };
+
     inline std::vector<ArrowInput*> ArrowInput::bound_inputs;
 }

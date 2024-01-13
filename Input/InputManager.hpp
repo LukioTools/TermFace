@@ -1,5 +1,6 @@
 #pragma once
 #include "../NAMSP_NAME.hpp"
+#include <chrono>
 #include <iostream>
 #include <istream>
 #include <ostream>
@@ -26,12 +27,21 @@ namespace NAMSP_NAME
         std::thread run_thread;
         bool run = true;
         static std::vector<Parser> parsers;
+        static std::chrono::microseconds delay_between_getch;
         static void input_loop(std::istream& is, InputManager& state){
             #if defined(DEBUG)
             std::clog << "Starting input lööp!" << std::endl;
             #endif
             while (state.run) {
-                auto c = is.get();
+                int c;
+                while (state.run) {
+                    c = is.get();
+                    if(c == -1)
+                        is.clear();
+                    else
+                        break;
+                    std::this_thread::sleep_for(delay_between_getch); //dont kill the thread
+                }
                 #if defined(DEBUG)
                 std::cout << "Got: " << c << std::endl;
                 #endif
@@ -100,6 +110,7 @@ namespace NAMSP_NAME
     };
 
     inline std::vector<Parser> InputManager::parsers;
+    inline std::chrono::microseconds InputManager::delay_between_getch = std::chrono::milliseconds(16);
 
 
 }

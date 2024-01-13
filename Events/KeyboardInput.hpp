@@ -48,13 +48,11 @@ namespace NAMSP_NAME
     template<typename Fn>
     class KeyboardInputLambda : public KeyboardInput
     {
-    private:
     public:
         Fn fn;
         void event(KeyboardInputType c) override{
             fn(c);
         }
         KeyboardInputLambda(Fn fn) : fn(fn){}
-        ~KeyboardInputLambda() {}
     };
 }

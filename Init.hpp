@@ -2,6 +2,7 @@
 #include "NAMSP_NAME.hpp"
 #include "def.hpp"
 #include <cstdlib>
+#include <fcntl.h>
 #include <fstream>
 #include <iostream>
 #include <streambuf>
@@ -27,6 +28,11 @@ namespace NAMSP_NAME
         std::clog.rdbuf(buf_clog);
         std::cerr.rdbuf(buf_cerr);
         std::cout << norm_buffer <<disable_mouse(SET_SGR_EXT_MODE_MOUSE) << disable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
+
+            //fcntl
+        fcntl(STDIN_FILENO, F_SETFL, fcntl_flags);
+
+            //termios
         tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     }
     inline static int init(int argc, char const *argv[])
@@ -37,10 +43,17 @@ namespace NAMSP_NAME
         buf_cerr =  std::cerr.rdbuf(os.rdbuf());
         std::cout <<  alt_buffer<<enable_mouse(SET_SGR_EXT_MODE_MOUSE) << enable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
 
+            //fcntl
+        fcntl_flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+        fcntl(STDIN_FILENO, F_SETFL, fcntl_flags | O_NONBLOCK);
+
+            //termios
         tcgetattr(STDIN_FILENO, &oldt);
         newt = oldt;
         newt.c_lflag &= ~(ICANON | ECHO);
         tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+            //input parsers
         InputManager::parsers.push_back(Parsers::Mouse);
         InputManager::parsers.push_back(Parsers::ArrowKey);
         InputManager::parsers.push_back(Parsers::Characher);

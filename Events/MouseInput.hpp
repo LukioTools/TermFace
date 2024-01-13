@@ -62,5 +62,16 @@ namespace NAMSP_NAME
         }
     };
 
+    template<typename Fn>
+    class MouseInputLambda : public MouseInput
+    {
+    public:
+        Fn fn;
+        void event(MouseInputType c) override{
+            fn(c);
+        }
+        MouseInputLambda(Fn fn) : fn(fn){}
+    };
+
     inline std::vector<MouseInput*> MouseInput::bound_inputs;
 }

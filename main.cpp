@@ -71,40 +71,7 @@ int main(int argc, char const *argv[])
 
         body.child(std::unique_ptr<ElementAbstract>(e));        
         body.color({{255,0,255},{255,255,255}});
-        /*
-        class SomeThing : MouseInput, KeyboardInput, ArrowInput
-        {
-        public:
-            volatile bool run = true;
-            Element* e;
-            void event(Direction d) override{
-                if(d == Direction::RIGHT)
-                    e->posx(e->posx()+1);
-            }
-            void event(KeyboardInputType c) override{
-                if(c == 1 || c == 4)
-                    run = false;
-                if(c == 'd')
-                    e->posx(e->abs_posx()+1);
-                if(c == 'a')
-                    e->posx(e->abs_posx()-1);
-                if(c == 'w')
-                    e->posy(e->abs_posy()-1);
-                if(c == 's')
-                    e->posy(e->abs_posy()+1);
-
-                
-                auto l = e->wh();
-                auto p = e->pos();
-                auto drawable = e->clamp(render_buffer, l.x, l.y, p.x, p.y);
-                std::clog << "drawable: " << (drawable ? "true" : "false")<< "\t" << l.x << " : " << l.y << " / " << p.x << " : " << p.y << std::endl;
-            }
-            void event(MouseInputType a) override{
-            }
-            SomeThing(Element* e) : e(e) {}
-            ~SomeThing() {}
-        } elem(e);
-        */
+        
         bool run = true;
         KeyboardInputLambda lambda([&](KeyboardInputType c){
                 if(c == 1 || c == 4)
@@ -124,8 +91,6 @@ int main(int argc, char const *argv[])
                 auto drawable = e->clamp(render_buffer, l.x, l.y, p.x, p.y);
                 std::clog << "drawable: " << (drawable ? "true" : "false")<< "\t" << l.x << " : " << l.y << " / " << p.x << " : " << p.y << std::endl;
         });
-
-        
 
         while (run) {
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
