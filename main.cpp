@@ -61,13 +61,18 @@ int main(int argc, char const *argv[])
         render_buffer.alloc(WIDTH,HEIGHT);
         display_buffer.alloc(WIDTH,HEIGHT);
         render_buffer.fill({Pixel{
-            {{1,1,1},{200,200,200}},
+            {{0,0,0},{200,200,200}},
             ' ',
         }, 0});
 
+        body.draw(render_buffer);
+
 
         display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
-            mv(x, y) << sbb.get(x,y).p << attr_reset;
+            auto& a = sba.get(x,y);
+            auto& b = sbb.get(x,y);
+            a=b;
+            mv(x, y) << b.p << attr_reset;
         }, render_buffer);
         std::cout.flush();
 
