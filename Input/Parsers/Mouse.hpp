@@ -66,7 +66,7 @@ namespace NAMSP_NAME
                     }
                 }
                 try {
-                    m.x = std::stoi(action);
+                    m.x = std::stoi(action)-1;
                 } catch (...) {
                     return false;                    
                 }
@@ -94,7 +94,7 @@ namespace NAMSP_NAME
                     }
                 }
                 try {
-                    m.y = std::stoi(action);
+                    m.y = std::stoi(action)-1;
                 } catch (...) {
                     return false;                    
                 }
