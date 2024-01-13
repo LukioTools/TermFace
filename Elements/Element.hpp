@@ -4,6 +4,7 @@
 #include "../Screen/ScreenBuffer.hpp"
 #include <algorithm>
 #include <cstddef>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -108,8 +109,8 @@ namespace NAMSP_NAME
             {
                 for (size_t w = 0; w < sb.width(); w++)
                 {
-                    
-                    auto& e = sb.get(h, w);
+                    std::clog << "Get: " << w << " : " << h << std::endl;
+                    auto& e = sb.get(w, h);
                     e.z_index = z_index();
                     e.p.c = color();
                     e.p.ch = ' ';

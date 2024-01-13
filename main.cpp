@@ -2,6 +2,7 @@
 #include <chrono>
 #include <cstddef>
 #include <memory>
+#include <stdexcept>
 #include <thread>
 #define EventListenerDEBUG 1
 #define EventListenerERRORS 1
@@ -66,7 +67,8 @@ int main(int argc, char const *argv[])
             ' ',
         }, 0});
 
-        //body.draw(render_buffer);
+        body.color({{255,0,255},{255,255,255}});
+        body.draw(render_buffer);
 
 
         display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
@@ -81,7 +83,9 @@ int main(int argc, char const *argv[])
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
     }
-    catch(...){}
+    catch(const std::out_of_range& out_of_range){
+        std::clog << out_of_range.what() << std::endl;
+    }
     deinit();
     return 0;
 }

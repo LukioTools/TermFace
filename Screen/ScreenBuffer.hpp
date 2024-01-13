@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <string>
 
 #include "../NAMSP_NAME.hpp"
 #include "../Data/Pixel.hpp"
@@ -79,6 +80,8 @@ namespace NAMSP_NAME
             return ptr[index];
         }
         inline ScreenElement& get(std::size_t x, std::size_t y) const{
+            if(x+y*w > w * h)
+                throw std::out_of_range("ScreenBuffer::get::out of range:: x: " + std::to_string(x) + " y: " + std::to_string(y) + " w: " + std::to_string(w) + " h: " + std::to_string(h));
             return get(x+y*w);
         }
 
