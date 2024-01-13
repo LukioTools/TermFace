@@ -68,6 +68,7 @@ int main(int argc, char const *argv[])
         display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
             mv(x, y) << sbb.get(x,y).p;
         }, render_buffer);
+        std::cout.flush();
 
         while (elem.run) {
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
