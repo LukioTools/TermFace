@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstring>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 
@@ -222,8 +223,10 @@ namespace NAMSP_NAME
 
         template<typename Fn>
         ScreenBuffer& difference(Fn fn, const ScreenBuffer& sb){
-            auto hmin =     std::min(sb.h, h);
-            auto wmin =     std::min(sb.w, w);
+            auto hmin =     std::min(sb.height(), height());
+            auto wmin =     std::min(sb.width(), width());
+            std::clog << "hmin: " << hmin << std::endl;
+            std::clog << "wmin: " << wmin << std::endl;
             for (size_t h = 0; h < hmin; h++)
             {
                 for (size_t w = 0; w < wmin; w++)
