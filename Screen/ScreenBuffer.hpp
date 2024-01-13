@@ -33,6 +33,11 @@ namespace NAMSP_NAME
                 return true;
             return false;
         }
+        inline ScreenBuffer& _alloc(std::size_t n){
+            if(need_to_realloc(n))
+                ptr.reset(new ScreenElement[n]());
+            return *this;
+        }
 
     public:
         std::size_t width() const {
@@ -59,13 +64,11 @@ namespace NAMSP_NAME
             return *this;
         }
 
-        inline ScreenBuffer& alloc(std::size_t n){
-            if(need_to_realloc(n))
-                ptr.reset(new ScreenElement[n]());
-            return *this;
-        }
+
         inline ScreenBuffer& alloc(std::size_t x, std::size_t y){
-            return alloc(x*y);
+            w = x;
+            h = y;
+            return _alloc(x*y);
         };
         inline std::size_t size(){
             return w*h;

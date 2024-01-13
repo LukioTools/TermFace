@@ -8,7 +8,7 @@ namespace NAMSP_NAME
 {
     inline void refresh_screen_size(int = 0){
         winsize w;
-        ioctl(STDOUT_FILENO, TIOCGWINSZ, w);
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
         WIDTH = w.ws_col;
         HEIGHT = w.ws_row;
     }

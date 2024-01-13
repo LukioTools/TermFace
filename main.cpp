@@ -11,6 +11,8 @@
 #include "Elements/Element.hpp"
 #include "Globals/ScreenBuffers.hpp"
 #include "Shaders/flatshade.hpp"
+#include "Screen/refreshScreenBuffers.hpp"
+#include "Screen/refreshScreenSize.hpp"
 
 using namespace::tui;
 
@@ -50,7 +52,13 @@ int main(int argc, char const *argv[])
 {
     init(argc, argv);
     {
+        refresh_screen_size();
+        std::clog << "WIDTH: " << WIDTH << std::endl;
+        std::clog << "HEIGHT: " << HEIGHT << std::endl;
+        refresh_screen_buffers();
+        std::clog << "Allocating renderbuffer" << std::endl;
         render_buffer.alloc(WIDTH,HEIGHT);
+        std::clog << "Allocating display buffer" << std::endl;
         display_buffer.alloc(WIDTH,HEIGHT);
         InputManager man;
         auto e = new Element;
