@@ -1,5 +1,6 @@
 #include "def.hpp"
 #include <chrono>
+#include <cstddef>
 #include <memory>
 #include <thread>
 #define EventListenerDEBUG 1
@@ -52,29 +53,21 @@ int main(int argc, char const *argv[])
 {
     init(argc, argv);
     {
+        InputManager man;
         refresh_screen_size();
         std::clog << "WIDTH: " << WIDTH << std::endl;
         std::clog << "HEIGHT: " << HEIGHT << std::endl;
         refresh_screen_buffers();
-        std::clog << "Allocating renderbuffer" << std::endl;
         render_buffer.alloc(WIDTH,HEIGHT);
-        std::clog << "Allocating display buffer" << std::endl;
         display_buffer.alloc(WIDTH,HEIGHT);
-        InputManager man;
-        auto e = new Element;
-        e->color({{255,0,255},{255,255,255}});
-        tui::body.child(std::unique_ptr<ElementAbstract>(e));
+        render_buffer.fill({Pixel{
+            {{255,0,255},{200,200,200}},
+            ' ',
+        }, 0});
 
-        std::clog << "Drawing" << std::endl;
-        body.draw(render_buffer);
-
-        std::clog << "Rendering" << std::endl;
-        display_buffer.difference([](ScreenBuffer & sba, const ScreenBuffer & sbb, std::size_t x, std::size_t y ){
-            std::clog << "Difference: " << x << " : " << y << std::endl;
-            mv(x, y) << sba.get(x,y).p;
+        display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
+            mv(x, y) << sbb.get(x,y).p;
         }, render_buffer);
-        std::clog << "Rendered" << std::endl;
-
 
         while (elem.run) {
             std::this_thread::sleep_for(std::chrono::milliseconds(200));

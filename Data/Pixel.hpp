@@ -7,7 +7,7 @@
 namespace NAMSP_NAME
 {
     typedef unsigned int pixel_char_t;
-    class Pixel //add the attribute, you can allocata 2 bytes to it
+    struct Pixel //add the attribute, you can allocata 2 bytes to it
     {
     public:
         Color c;
@@ -33,8 +33,5 @@ namespace NAMSP_NAME
         bool operator!=(const Pixel& p)const {
             return c != p.c || ch != p.ch || a != p.a;
         }
-
-        Pixel(/* args */) {}
-        ~Pixel() {}
     };
 } // namespace NAMSP_NAME
