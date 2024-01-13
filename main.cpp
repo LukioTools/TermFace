@@ -1,21 +1,25 @@
-#include "Events/ArrowInput.hpp"
+#define EventListenerDEBUG 1
+#define EventListenerERRORS 1
+
+
 #include "def.hpp"
 #include <chrono>
 #include <cstddef>
 #include <memory>
 #include <stdexcept>
 #include <thread>
-#define EventListenerDEBUG 1
-#define EventListenerERRORS 1
+
 #include <iostream>
 #include "Init.hpp"
 #include "Input/InputManager.hpp"
 #include "Events/MouseInput.hpp"
 #include "Elements/Element.hpp"
+#include "Elements/Body.hpp"
 #include "Globals/ScreenBuffers.hpp"
 #include "Shaders/flatshade.hpp"
 #include "Screen/refreshScreenBuffers.hpp"
 #include "Screen/refreshScreenSize.hpp"
+#include "Events/ArrowInput.hpp"
 
 using namespace::tui;
 
@@ -37,7 +41,7 @@ void render_thread(){
 
 
         display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
-            std::clog << "diff: " << x << '/' << y << std::endl;
+            //std::clog << "diff: " << x << '/' << y << std::endl;
             auto& a = sba.get(x,y);
             auto& b = sbb.get(x,y);
             a=b;
@@ -79,9 +83,16 @@ int main(int argc, char const *argv[])
             void event(KeyboardInputType c) override{
                 if(c == 1 || c == 4)
                     run = false;
-                if(c == 'd'){
-                    e->posx(e->posx()+1);
-                }
+                if(c == 'd')
+                    e->posx(e->abs_posx()+1);
+                if(c == 'a')
+                    e->posx(e->abs_posx()-1);
+                
+                auto l = e->wh();
+                auto p = e->pos();
+                auto drawable = e->clamp(render_buffer, l.x, l.y, p.x, p.y);
+
+                std::clog << "drawable: " << (drawable ? "true" : "false")<< "\t" << l.x << " : " << l.y << " / " << p.x << " : " << p.y << std::endl;
             }
             void event(MouseInputType a) override{
             }
