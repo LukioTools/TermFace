@@ -83,8 +83,14 @@ namespace NAMSP_NAME
     protected:
         std::vector<std::unique_ptr<ElementAbstract>> children_vec;
         Color c;
-    
+        std::size_t zi = 0; 
     public:
+        void z_index(std::size_t z) override{
+            zi =z;
+        }
+        std::size_t z_index() override{
+            return zi;
+        }
         std::vector<std::unique_ptr<ElementAbstract>> * children() override{
             return &children_vec;
         }
@@ -96,6 +102,24 @@ namespace NAMSP_NAME
         }
         void color(Color col) override {c = col;}
         Color color() override {return c;}
+
+        void draw(ScreenBuffer &sb) override{
+            for (size_t h = 0; h < sb.height(); h++)
+            {
+                for (size_t w = 0; w < sb.width(); w++)
+                {
+                    auto& e = sb.get(h, w);
+                    e.z_index = z_index();
+                    e.p.c = color();
+                    e.p.ch = ' ';
+                }
+            }
+
+            auto c = children();
+            if(c)
+            for (auto& e : *c)
+                e->draw(sb);
+        }
 
 
         double height() override{

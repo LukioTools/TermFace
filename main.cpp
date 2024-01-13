@@ -1,3 +1,4 @@
+#include "def.hpp"
 #include <chrono>
 #include <memory>
 #include <thread>
@@ -56,9 +57,12 @@ int main(int argc, char const *argv[])
         e->color({{255,0,255},{255,255,255}});
         tui::body.child(std::unique_ptr<ElementAbstract>(e));
 
+        std::clog << "Drawing" << std::endl;
         body.draw(render_buffer);
 
-        display_buffer.difference(flatrender, render_buffer);
+        display_buffer.difference([](ScreenBuffer & sba, const ScreenBuffer & sbb, std::size_t x, std::size_t y ){
+            mv(x, y) << sba.get(x,y).p;
+        }, render_buffer);
 
 
         while (elem.run) {
