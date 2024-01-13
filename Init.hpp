@@ -21,14 +21,14 @@ namespace NAMSP_NAME
     inline static void deinit()
     {
         std::clog.rdbuf(std::cin.rdbuf());
-        std::cout << disable_mouse(SET_SGR_EXT_MODE_MOUSE) << disable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
+        std::cout << norm_buffer <<disable_mouse(SET_SGR_EXT_MODE_MOUSE) << disable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
         tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     }
     inline static int init(int argc, char const *argv[])
     {
         os = std::ofstream("/dev/pts/4");
         buf_clog =  std::clog.rdbuf(os.rdbuf());
-        std::cout << enable_mouse(SET_SGR_EXT_MODE_MOUSE) << enable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
+        std::cout <<  alt_buffer<<enable_mouse(SET_SGR_EXT_MODE_MOUSE) << enable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
 
         tcgetattr(STDIN_FILENO, &oldt);
         newt = oldt;
