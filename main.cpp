@@ -66,7 +66,13 @@ int main(int argc, char const *argv[])
             {{0,0,0},{200,200,200}},
             ' ',
         }, 0});
+        auto e = new Element;
+        e->color({{255,0,0},{255,255,255}});
+        e->width(100.);
+        e->st_width(SizeType::SCR);
+        e->height(5);
 
+        body.child(std::unique_ptr<ElementAbstract>(e));        
         body.color({{255,0,255},{255,255,255}});
         body.draw(render_buffer);
 

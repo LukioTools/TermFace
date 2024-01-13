@@ -3,6 +3,7 @@
 #include "../Data/Position.hpp"
 #include "../Screen/ScreenBuffer.hpp"
 #include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <iostream>
 #include <memory>
@@ -27,10 +28,10 @@ namespace NAMSP_NAME
             if(x+w < 0 || y+h < 0)
                 return false;
             if(x+w >= sb.width()){
-                w = sb.width()-x-1;
+                w = sb.width()-x;
             }
             if(y+h >= sb.height()){
-                h = sb.height()-y-1;
+                h = sb.height()-y;
             }
             if(y < 0){
                 y = 0;
@@ -55,7 +56,24 @@ namespace NAMSP_NAME
         virtual double width(){return 0;} 
         virtual double height(){return 0;} 
         virtual double posx(){return 0;} 
-        virtual double posy(){return 0;} 
+        virtual double posy(){return 0;}
+
+        virtual void width(double){} 
+        virtual void height(double){} 
+        virtual void posx(double){} 
+        virtual void posy(double){}
+
+        virtual SizeType st_width(){return ABS;} 
+        virtual SizeType st_height(){return ABS;} 
+        virtual SizeType st_posx(){return ABS;} 
+        virtual SizeType st_posy(){return ABS;}
+
+        virtual void st_width(SizeType ){} 
+        virtual void st_height(SizeType ){} 
+        virtual void st_posx(SizeType ){} 
+        virtual void st_posy(SizeType ){}
+
+
         virtual std::size_t z_index(){return 0;}
         virtual void z_index(std::size_t){}
 
@@ -136,6 +154,8 @@ namespace NAMSP_NAME
         double posy() override{
             return 0;
         }
+
+
         Position pos() override{
             return {0,0};
         }
@@ -160,10 +180,10 @@ namespace NAMSP_NAME
         Position p; //pos {x, y}
         float w; // width
         float h; // height
-        SizeType pxt; // pos x type
-        SizeType pyt; // pos y type
-        SizeType wt; // width type
-        SizeType ht; // height type
+        SizeType pxt = ABS; // pos x type
+        SizeType pyt = ABS; // pos y type
+        SizeType wt = ABS; // width type
+        SizeType ht = ABS; // height type
         Color c;
         size_t zi = 1; //z index
     public:
@@ -194,12 +214,12 @@ namespace NAMSP_NAME
             {
             case SizeType::REL:
                 if(parent())
-                    return parent()->width()*w/100.;
+                    return (parent()->width()*w/100.);
             case SizeType::SCR:
-                return w/100.*WIDTH;
+                return (w/100.*WIDTH);
             case SizeType::ABS:
             default:
-                return w;
+                return (w);
             }
 
         } 
@@ -208,12 +228,12 @@ namespace NAMSP_NAME
             {
             case SizeType::REL:
                 if(parent())
-                    return parent()->height()*h/100.;
+                    return (parent()->height()*h/100.);
             case SizeType::SCR:
-                return h/100.*HEIGHT;
+                return (h/100.*HEIGHT);
             case SizeType::ABS:
             default:
-                return h;
+                return (h);
             }
         }
         double posx() override{
@@ -221,12 +241,12 @@ namespace NAMSP_NAME
             {
             case SizeType::REL:
                 if(parent())
-                    return parent()->width()*p.x/100.;
+                    return (parent()->width()*p.x/100.);
             case SizeType::SCR:
-                return p.x/100.*WIDTH;
+                return (p.x/100.*WIDTH);
             case SizeType::ABS:
             default:
-                return p.x;
+                return (p.x);
             }
         }
         double posy() override{
@@ -234,13 +254,43 @@ namespace NAMSP_NAME
             {
             case SizeType::REL:
                 if(parent())
-                    return parent()->height()*p.y/100.;
+                    return (parent()->height()*p.y/100.);
             case SizeType::SCR:
-                return p.y/100.*HEIGHT;
+                return ( p.y/100.*HEIGHT);
             case SizeType::ABS:
             default:
-                return p.y;
+                return (p.y);
             }
+        }
+
+        void width(double wi) override{
+            w = wi;
+        }void height(double he) override{
+            h = he;
+        }void posx(double x) override{
+            p.x = x;
+        }void posy(double y) override{
+            p.y = y;
+        }
+
+        void    st_width(SizeType t) override{
+            wt = t;
+        }void   st_height(SizeType t) override{
+            ht = t;
+        }void   st_posx(SizeType t) override{
+            pxt = t;
+        }void   st_posy(SizeType t) override{
+            pyt = t;
+        }
+
+        SizeType    st_width() override{
+            return wt;
+        }SizeType   st_height() override{
+            return ht;
+        }SizeType   st_posx() override{
+            return pxt;
+        }SizeType   st_posy() override{
+            return pyt;
         }
 
         Position wh() override{return {width(), height()};}
@@ -250,14 +300,18 @@ namespace NAMSP_NAME
             double h = height();
             double x = posx();
             double y = posy();
+
             if(clamp(sb, w, h, x, y)){
                 for (size_t hi = 0; hi < h; hi++)
                 {
                     for (size_t wi = 0; wi < w; wi++)
                     {
-                        auto e = sb.get(wi, hi);
-                        if(e.z_index < z_index())
+                        //std::clog << "Element draw: " << wi << " : " << hi << std::endl;
+                        auto& e = sb.get(wi, hi);
+                        if(e.z_index > z_index()){
+                            std::clog << "Skipping since bigger zindex: " << e.z_index <<'/'<<z_index() << std::endl;
                             continue;
+                        }
                         e.p.c = color();
                     }
                 }
