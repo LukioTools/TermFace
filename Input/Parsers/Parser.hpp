@@ -1,12 +1,6 @@
 #pragma once
-#include <iostream>
-#include <istream>
-#include <thread>
 #include <vector>
-
 #include "../../NAMSP_NAME.hpp"
-
-
 
 namespace NAMSP_NAME
 {

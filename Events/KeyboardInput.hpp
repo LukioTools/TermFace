@@ -43,4 +43,18 @@ namespace NAMSP_NAME
     };
 
     inline std::vector<KeyboardInput*> KeyboardInput::bound_inputs;
+
+
+    template<typename Fn>
+    class KeyboardInputLambda : public KeyboardInput
+    {
+    private:
+    public:
+        Fn fn;
+        void event(KeyboardInputType c) override{
+            fn(c);
+        }
+        KeyboardInputLambda(Fn fn) : fn(fn){}
+        ~KeyboardInputLambda() {}
+    };
 }

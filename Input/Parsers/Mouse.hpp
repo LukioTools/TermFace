@@ -1,7 +1,5 @@
 #pragma once
 #include "Parser.hpp"
-#include <iostream>
-#include <iterator>
 #include <string>
 #include <vector>
 #include "../../Events/MouseInput.hpp"

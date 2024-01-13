@@ -1,6 +1,5 @@
 #pragma once
 #include "../NAMSP_NAME.hpp"
-#include <functional>
 #include <iostream>
 #include <istream>
 #include <ostream>
