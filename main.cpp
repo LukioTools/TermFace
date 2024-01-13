@@ -64,10 +64,10 @@ int main(int argc, char const *argv[])
             {{1,1,1},{200,200,200}},
             ' ',
         }, 0});
-        
+
 
         display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
-            mv(x, y) << sbb.get(x,y).p;
+            mv(x, y) << sbb.get(x,y).p << attr_reset;
         }, render_buffer);
         std::cout.flush();
 
