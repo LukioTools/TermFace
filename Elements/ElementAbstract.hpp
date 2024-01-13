@@ -51,7 +51,6 @@ namespace NAMSP_NAME
             if(y+h >= sb.height()){
                 h = sb.height()-y;
             }
-
             //end adjustments
             if(x < 0){
                 x = 0;
