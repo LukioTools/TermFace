@@ -21,15 +21,15 @@ namespace NAMSP_NAME
     protected:
             //returns if displayable
         bool clamp(const ScreenBuffer& sb, double& w, double& h, double& x, double& y){
-            if(x > sb.width() || y > sb.height())
+            if(x >= sb.width() || y >= sb.height())
                 return false;
             if(x+w < 0 || y+h < 0)
                 return false;
-            if(x+w > sb.width()){
-                w = sb.width()-x;
+            if(x+w >= sb.width()){
+                w = sb.width()-x-1;
             }
-            if(y+h > sb.height()){
-                h = sb.height()-y;
+            if(y+h >= sb.height()){
+                h = sb.height()-y-1;
             }
             if(y < 0){
                 y = 0;
