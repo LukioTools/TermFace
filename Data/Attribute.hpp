@@ -1,4 +1,5 @@
 #pragma once
+#include <initializer_list>
 #include <sstream>
 #include "BitMask.hpp"
 #include "../def.hpp"
@@ -78,6 +79,10 @@ namespace NAMSP_NAME{
         }
 
         Attribute(/* args */) {}
+        Attribute(const std::initializer_list<Attributes>& ls) {
+            for (auto e : ls) 
+                bm.set(e, true);
+        }
         ~Attribute() {}
     };
 }

@@ -10,8 +10,8 @@ namespace NAMSP_NAME
     struct Pixel //add the attribute, you can allocata 2 bytes to it
     {
     public:
-        Color c;
-        pixel_char_t ch;
+        Color c= {{200, 200, 200}, {0, 0, 0}};
+        pixel_char_t ch = ' ';
         Attribute a;
 
 

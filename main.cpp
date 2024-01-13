@@ -1,3 +1,4 @@
+#include "Events/ArrowInput.hpp"
 #include "def.hpp"
 #include <chrono>
 #include <cstddef>
@@ -19,36 +20,34 @@
 using namespace::tui;
 
 
-class SomeThing : MouseInput, KeyboardInput, ArrowInput
-{
-private:
-public:
-    volatile bool run = true;
-    void event(Direction d) override{
 
+bool render_run = true;
+void render_thread(){
+    while (render_run)
+    {
+        refresh_screen_size();
+        refresh_screen_buffers();
+        render_buffer.fill({Pixel{
+            {{0,0,0},{200,200,200}},
+            ' ',
+        }, 0});
+
+        body.draw(render_buffer);
+
+
+
+        display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
+            std::clog << "diff: " << x << '/' << y << std::endl;
+            auto& a = sba.get(x,y);
+            auto& b = sbb.get(x,y);
+            a=b;
+            mv(x, y) << b.p << attr_reset;
+        }, render_buffer);
+        std::cout.flush();
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
-    void event(KeyboardInputType c) override{
-        if(c == 1 || c == 4)
-            run = false;
-    }
-    void event(MouseInputType a) override{
-        //std::cout << "Got mouse event!!" << std::endl;
-        //std::cout << "x: " << a.x << std::endl;
-        //std::cout << "y: " << a.y << std::endl;
-        //std::cout << "LEFT: " <<    (a.a.get(MouseInputType::LEFT) ? "true" : "false")   << '\n';
-        //std::cout << "RIGHT: " <<   (a.a.get(MouseInputType::RIGHT) ? "true" : "false")  << '\n';
-        //std::cout << "CENTER: " <<  (a.a.get(MouseInputType::CENTER) ? "true" : "false") << '\n';
-        //std::cout << "HILIGHT: " << (a.a.get(MouseInputType::HILIGHT) ? "true" : "false")<< '\n';
-        //std::cout << "HOVER: " <<   (a.a.get(MouseInputType::HOVER) ? "true" : "false")  << '\n';
-        //std::cout << "SCROLL: " <<  (a.a.get(MouseInputType::SCROLL) ? "true" : "false") << '\n';
-        //std::cout << "DOWN: " <<    (a.a.get(MouseInputType::DOWN) ? "true" : "false")   << '\n';
-        //std::cout << "UP: " <<      (a.a.get(MouseInputType::UP) ? "true" : "false")     << '\n';
-        //std::cout << "CTRL: " <<    (a.a.get(MouseInputType::CTRL) ? "true" : "false")   << '\n';
-        //std::cout << "ALT: " <<     (a.a.get(MouseInputType::ALT) ? "true" : "false")    << '\n';
-    }
-    SomeThing(/* args */) {}
-    ~SomeThing() {}
-} elem;
+    
+}
 
 int main(int argc, char const *argv[])
 {
@@ -56,16 +55,9 @@ int main(int argc, char const *argv[])
     try
     {
         InputManager man;
-        refresh_screen_size();
         std::clog << "WIDTH: " << WIDTH << std::endl;
         std::clog << "HEIGHT: " << HEIGHT << std::endl;
-        refresh_screen_buffers();
-        render_buffer.alloc(WIDTH,HEIGHT);
-        display_buffer.alloc(WIDTH,HEIGHT);
-        render_buffer.fill({Pixel{
-            {{0,0,0},{200,200,200}},
-            ' ',
-        }, 0});
+        std::thread rthr(render_thread);
         auto e = new Element;
         e->color({{255,0,0},{255,255,255}});
         e->width(100.);
@@ -74,22 +66,39 @@ int main(int argc, char const *argv[])
 
         body.child(std::unique_ptr<ElementAbstract>(e));        
         body.color({{255,0,255},{255,255,255}});
-        body.draw(render_buffer);
 
+        class SomeThing : MouseInput, KeyboardInput, ArrowInput
+        {
+        public:
+            volatile bool run = true;
+            Element* e;
+            void event(Direction d) override{
+                if(d == Direction::RIGHT)
+                    e->posx(e->posx()+1);
+            }
+            void event(KeyboardInputType c) override{
+                if(c == 1 || c == 4)
+                    run = false;
+                if(c == 'd'){
+                    e->posx(e->posx()+1);
+                }
+            }
+            void event(MouseInputType a) override{
+            }
+            SomeThing(Element* e) : e(e) {}
+            ~SomeThing() {}
+        } elem(e);
 
-        display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
-            auto& a = sba.get(x,y);
-            auto& b = sbb.get(x,y);
-            a=b;
-            mv(x, y) << b.p << attr_reset;
-        }, render_buffer);
-        std::cout.flush();
+        
 
         while (elem.run) {
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
+        render_run = false;
+        rthr.join();
     }
     catch(const std::out_of_range& out_of_range){
+        render_run = false;
         std::clog << out_of_range.what() << std::endl;
     }
     deinit();

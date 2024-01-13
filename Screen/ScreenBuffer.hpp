@@ -17,7 +17,7 @@ namespace NAMSP_NAME
         Pixel p;
         unsigned int z_index = 0;
         bool operator!=(const ScreenElement& e)const{
-            return p != e.p;
+            return p != e.p || z_index != e.z_index;
         }
     };
     

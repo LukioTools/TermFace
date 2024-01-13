@@ -309,6 +309,7 @@ namespace NAMSP_NAME
                         if(e.z_index > z_index()){
                             continue;
                         }
+                        e.p.ch = ' ';
                         e.p.c = color();
                     }
                 }
