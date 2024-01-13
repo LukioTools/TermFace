@@ -62,6 +62,7 @@ int main(int argc, char const *argv[])
 
         std::clog << "Rendering" << std::endl;
         display_buffer.difference([](ScreenBuffer & sba, const ScreenBuffer & sbb, std::size_t x, std::size_t y ){
+            std::clog << "Difference: " << x << " : " << y << std::endl;
             mv(x, y) << sba.get(x,y).p;
         }, render_buffer);
         std::clog << "Rendered" << std::endl;
