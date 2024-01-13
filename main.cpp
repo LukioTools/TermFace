@@ -61,9 +61,10 @@ int main(int argc, char const *argv[])
         render_buffer.alloc(WIDTH,HEIGHT);
         display_buffer.alloc(WIDTH,HEIGHT);
         render_buffer.fill({Pixel{
-            {{255,0,255},{200,200,200}},
+            {{1,1,1},{200,200,200}},
             ' ',
         }, 0});
+        
 
         display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
             mv(x, y) << sbb.get(x,y).p;
