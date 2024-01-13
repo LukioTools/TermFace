@@ -60,9 +60,11 @@ int main(int argc, char const *argv[])
         std::clog << "Drawing" << std::endl;
         body.draw(render_buffer);
 
+        std::clog << "Rendering" << std::endl;
         display_buffer.difference([](ScreenBuffer & sba, const ScreenBuffer & sbb, std::size_t x, std::size_t y ){
             mv(x, y) << sba.get(x,y).p;
         }, render_buffer);
+        std::clog << "Rendered" << std::endl;
 
 
         while (elem.run) {
