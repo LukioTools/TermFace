@@ -55,7 +55,7 @@ namespace NAMSP_NAME{
                 os << blink;
             }
             if(a.get(REVERSE_COLOR)){
-                os << reverse;
+                os << reverse_str;
             }
             if(a.get(HIDDEN)){
                 os << hidden;

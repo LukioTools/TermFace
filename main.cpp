@@ -1,4 +1,5 @@
 #include <chrono>
+#include <memory>
 #include <thread>
 #define EventListenerDEBUG 1
 #define EventListenerERRORS 1
@@ -6,7 +7,9 @@
 #include "Init.hpp"
 #include "Input/InputManager.hpp"
 #include "Events/MouseInput.hpp"
-
+#include "Elements/Element.hpp"
+#include "Globals/ScreenBuffers.hpp"
+#include "Shaders/flatshade.hpp"
 
 using namespace::tui;
 
@@ -17,7 +20,7 @@ private:
 public:
     volatile bool run = true;
     void event(Direction d) override{
-        
+
     }
     void event(KeyboardInputType c) override{
         if(c == 1 || c == 4)
@@ -46,13 +49,24 @@ int main(int argc, char const *argv[])
 {
     init(argc, argv);
     {
+        render_buffer.alloc(WIDTH,HEIGHT);
+        display_buffer.alloc(WIDTH,HEIGHT);
         InputManager man;
-        
+        auto e = new Element;
+        e->color({{255,0,255},{255,255,255}});
+        tui::body.child(std::unique_ptr<ElementAbstract>(e));
+
+        body.draw(render_buffer);
+
+        display_buffer.difference(flatrender, render_buffer);
+
 
         while (elem.run) {
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
     }
     deinit();
+
+    std::cout << std::max(1, 0) << ':' << std::min(-1, 0) << std::endl; 
     return 0;
 }

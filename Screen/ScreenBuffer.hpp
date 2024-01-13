@@ -23,8 +23,8 @@ namespace NAMSP_NAME
     {
     private:
         std::size_t allocn  = 0;
-        std::size_t width   = 0;
-        std::size_t height  = 0;
+        std::size_t w   = 0;
+        std::size_t h  = 0;
         std::unique_ptr<ScreenElement[]> ptr  = nullptr;
 
         inline bool need_to_realloc(std::size_t n_elements){
@@ -34,6 +34,12 @@ namespace NAMSP_NAME
         }
 
     public:
+        std::size_t width() const {
+            return w;
+        }
+        std::size_t height() const {
+            return h;
+        }
         inline ScreenElement* get(){
             return ptr.get();
         }
@@ -61,15 +67,15 @@ namespace NAMSP_NAME
             return alloc(x*y);
         };
         inline std::size_t size(){
-            return width*height;
+            return w*h;
         }
         inline ScreenElement& get(std::size_t index) const{
-            if(index > width*height)
+            if(index > w*h)
                 throw std::out_of_range("ScreenBuffer::get::out of range");
             return ptr[index];
         }
         inline ScreenElement& get(std::size_t x, std::size_t y) const{
-            return get(x+y*width);
+            return get(x+y*w);
         }
 
         struct _Row
@@ -148,7 +154,7 @@ namespace NAMSP_NAME
         }
         inline iterator end(){
             return {
-                width*height,
+                w*h,
                 *this
             };
         }
@@ -216,8 +222,8 @@ namespace NAMSP_NAME
 
         template<typename Fn>
         ScreenBuffer& difference(Fn fn, const ScreenBuffer& sb){
-            auto hmin =     std::min(sb.height, height);
-            auto wmin =     std::min(sb.width, width);
+            auto hmin =     std::min(sb.h, h);
+            auto wmin =     std::min(sb.w, w);
             for (size_t h = 0; h < hmin; h++)
             {
                 for (size_t w = 0; w < wmin; w++)
