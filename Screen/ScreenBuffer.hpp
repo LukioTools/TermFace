@@ -31,7 +31,7 @@ namespace NAMSP_NAME
 
         inline bool need_to_realloc(std::size_t n_elements){
             if(allocn < n_elements || allocn/4 >= n_elements){
-                std::clog << "need to realloc: " << allocn << ':' << n_elements << std::endl;
+                //std::clog << "need to realloc: " << allocn << ':' << n_elements << std::endl;
                 return true;
             }
             return false;
@@ -170,19 +170,6 @@ namespace NAMSP_NAME
             };
         }
 
-        /*
-            usage:
-            auto it = sb.while();
-            while(it){
-                
-                it++;
-            }
-            or 
-            auto it = sb.while();
-            while(it.inc()){
-
-            }
-        */
         struct while_iterator 
         {
             std::size_t offset = 0;
@@ -233,46 +220,13 @@ namespace NAMSP_NAME
 
         template<typename Fn>
         ScreenBuffer& difference(Fn fn, const ScreenBuffer& sb){
+            
             auto hmin =     std::min(sb.height(), height());
             auto wmin =     std::min(sb.width(), width());
             for (size_t h = 0; h < hmin; h++)
-            {
                 for (size_t w = 0; w < wmin; w++)
-                {
-                    auto& a = get(w,h);
-                    auto& b= sb.get(w,h);
-                    
-                    if(a.p.ch != b.p.ch){
-                        ///std::clog << "Different ch" << std::endl;
+                    if(get(w,h) != sb.get(w,h))
                         fn(*this, sb, w, h);
-                    }
-                    else if(a.p.c != b.p.c){
-                        ///std::clog << "Different c" << std::endl;
-                        if(a.p.c.bg != b.p.c.bg){
-                            ///std::clog << "Different c.bg" << std::endl;
-                            ///std::clog << (int) a.p.c.bg.r << '/' << (int) b.p.c.bg.r << " : " << (int) a.p.c.bg.g << '/' << (int) b.p.c.bg.g << " : "  << 
-                            ///        (int) a.p.c.bg.b << '/' << (int) b.p.c.bg.b << std::endl;
-                        }
-                        if(a.p.c.fg != b.p.c.fg){
-                            ///std::clog << "Different c.fg" << std::endl;
-                            ///std::clog << (int) a.p.c.fg.r << '/' << (int) b.p.c.fg.r << " : " << (int) a.p.c.fg.g << '/' << (int) b.p.c.fg.g << " : "  << 
-                            ///        (int) a.p.c.fg.b << '/' << (int) b.p.c.fg.b << std::endl;
-                        }
-                        fn(*this, sb, w, h);
-                    }
-                    else if(a.p.a != b.p.a){
-                        ///std::clog << "Different a" << std::endl;
-                        ///fn(*this, sb, w, h);
-                    }else if(a.z_index != b.z_index){
-                        ///std::clog << "Different z_index" << std::endl;
-                        ///fn(*this, sb, w, h);
-                    }
-                    else if(a != b){
-                        ///std::clog << "Different a != b" << std::endl;
-                        fn(*this, sb, w, h);
-                    }
-                }
-            }
             return *this;
         }
         

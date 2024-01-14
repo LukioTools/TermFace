@@ -1,4 +1,6 @@
+#include "Elements/Text.hpp"
 #include <cstdio>
+#include <ostream>
 #define EventListenerDEBUG 1
 #define EventListenerERRORS 1
 #define DEBUG 1
@@ -66,11 +68,12 @@ int main(int argc, char const *argv[])
         std::clog << "WIDTH: " << WIDTH << std::endl;
         std::clog << "HEIGHT: " << HEIGHT << std::endl;
         std::thread rthr(render_thread);
-        auto e = new Element;
+        auto e = new Text;
         e->color({{255,0,0},{255,255,255}});
         e->width(100.);
         e->st_width(SizeType::SCR);
         e->height(5);
+        e->text("Hello World\nHow are you doing this fine evening!");
 
         body.child(std::unique_ptr<ElementAbstract>(e));        
         body.color({{255,0,255},{255,255,255}});
@@ -93,6 +96,16 @@ int main(int argc, char const *argv[])
                 auto p = e->pos();
                 auto drawable = e->clamp(render_buffer, l.x, l.y, p.x, p.y);
                 std::clog << "drawable: " << (drawable ? "true" : "false")<< "\t" << l.x << " : " << l.y << " / " << p.x << " : " << p.y << std::endl;
+        });
+
+        MouseInputLambda mlambda([&](MouseInputType m){
+            if(m.a.get(MouseInputType::LEFT) && m.a.get(MouseInputType::DOWN) && !m.a.get(MouseInputType::HILIGHT)){
+                auto a  = render_buffer.get(m.x, m.y);
+                auto b  = display_buffer.get(m.x, m.y);
+                std::clog << "a!=b: " << ( a!=b ? "true" : "false") << std::endl;
+                std::clog << "a.p.ch: '" << a.p.ch << "' (aka: '" << (char) a.p.ch << "')" <<    std::endl;
+                std::clog << "b.p.ch: '" << b.p.ch << "' (aka: '" << (char) b.p.ch << "')" <<    std::endl;
+            }
         });
 
         while (run) {
