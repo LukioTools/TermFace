@@ -1,10 +1,12 @@
 #pragma once
 #include "../NAMSP_NAME.hpp"
+#include <sys/poll.h>
 #include <chrono>
 #include <iostream>
 #include <istream>
 #include <ostream>
 #include <thread>
+#include <unistd.h>
 #include <vector>
 #include "Parsers/Parser.hpp"
 #if defined(DEBUG)
@@ -32,53 +34,40 @@ namespace NAMSP_NAME
             #if defined(DEBUG)
             std::clog << "Starting input lööp!" << std::endl;
             #endif
+            pollfd fds;
+            fds.fd = STDIN_FILENO; /* this is STDIN */
+            fds.events = POLLIN;
             while (state.run) {
-                int c;
-                while (state.run) {
-                    c = is.get();
-                    if(c == -1)
-                        is.clear();
-                    else
+                
+                while (true) {  //wait until has char
+                    if(!state.run)
+                        return;
+                    int ret = poll(&fds, 1, 0);
+                    if(ret == 1)
                         break;
-                    std::this_thread::sleep_for(delay_between_getch); //dont kill the thread
+                    if(ret == -1)
+                        std::cin.clear();
+                    std::this_thread::sleep_for(std::chrono::milliseconds(16));
                 }
-                #if defined(DEBUG)
-                std::cout << "Got: " << c << std::endl;
-                #endif
-                if(c == -1){
-                    std::cin.clear();
-                    #if defined(DEBUG)
-                    std::clog << "Got -1... clearing...!\n";
-                    #endif
-                }
-                else{
-                    state.buffer.push_back(c);
-                    relööp:
-                    for (auto& e : parsers) {
-                        if(e)
-                            if(e(state.buffer)){
-                                #if defined(DEBUG)
-                                                                
-                                std::clog << "Successfull parse from: ";
-                                if(e == Parsers::Mouse)
-                                    std::clog << "Mouse parser!" << std::endl;
-                                if(e == Parsers::ArrowKey)
-                                    std::clog << "ArrowKey parser!" << std::endl;
-                                if(e == Parsers::Characher)
-                                    std::clog << "Characher parser!" << std::endl;
-                                if(e == Parsers::InputCap)
-                                    std::clog << "InputCap parser!" << std::endl;
-                                #endif // DEBUG
 
-                                goto relööp;
-                            }
-                    }
+
+                int c = is.get();
+                if(c == -1){
+                    is.clear();
+                    continue;
+                }
+                
+                state.buffer.push_back(c);
+                relööp:
+                for (auto& e : parsers) {
+                    if(e)
+                        if(e(state.buffer))
+                            goto relööp;
                 }
             }
             #if defined(DEBUG)
             std::clog << "Exitting input lööp!" << std::endl;
             #endif
-
         }
         InputManager(std::istream& is = std::cin) : run_thread(input_loop, std::ref(is), std::ref(*this)) {}
         template<typename Fn>

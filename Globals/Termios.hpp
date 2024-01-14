@@ -5,6 +5,6 @@
 
 namespace NAMSP_NAME
 {
-    static int fcntl_flags;
+    //static int fcntl_flags;
     static termios newt, oldt;
 } // namespace NAMSP_NAME

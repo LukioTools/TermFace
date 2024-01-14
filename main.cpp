@@ -1,7 +1,7 @@
 #include <cstdio>
 #define EventListenerDEBUG 1
 #define EventListenerERRORS 1
-
+#define DEBUG 1
 
 #include "def.hpp"
 #include <chrono>
@@ -48,6 +48,7 @@ void render_thread(){
             a=b;
             mv(x, y) << b.p << attr_reset;
         }, render_buffer);
+
         std::cout.flush();
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
@@ -85,7 +86,7 @@ int main(int argc, char const *argv[])
                 if(c == 's')
                     e->posy(e->abs_posy()+1);
 
-                
+                std::clog << "Got:: " << c << std::endl;
                 auto l = e->wh();
                 auto p = e->pos();
                 auto drawable = e->clamp(render_buffer, l.x, l.y, p.x, p.y);

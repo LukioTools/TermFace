@@ -30,7 +30,7 @@ namespace NAMSP_NAME
         std::cout << norm_buffer <<disable_mouse(SET_SGR_EXT_MODE_MOUSE) << disable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
 
             //fcntl
-        fcntl(STDIN_FILENO, F_SETFL, fcntl_flags);
+        //fcntl(STDIN_FILENO, F_SETFL, fcntl_flags);
 
             //termios
         tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
@@ -44,8 +44,8 @@ namespace NAMSP_NAME
         std::cout <<  alt_buffer<<enable_mouse(SET_SGR_EXT_MODE_MOUSE) << enable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
 
             //fcntl
-        fcntl_flags = fcntl(STDIN_FILENO, F_GETFL, 0);
-        fcntl(STDIN_FILENO, F_SETFL, fcntl_flags | O_NONBLOCK);
+        //fcntl_flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+        //fcntl(STDIN_FILENO, F_SETFL, fcntl_flags | O_NONBLOCK);
 
             //termios
         tcgetattr(STDIN_FILENO, &oldt);
