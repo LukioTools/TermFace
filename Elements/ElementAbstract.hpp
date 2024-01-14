@@ -35,6 +35,14 @@ namespace NAMSP_NAME
     {
     protected:
     public:
+        inline bool inside(double x, double y){
+            auto l = wh();
+            auto p = pos();
+            if(x >= p.x && x <= p.x+l.x)
+                if(y >= p.y && y <= p.y+l.y)
+                    return true;
+            return false;
+        }
             //returns if displayable
         static bool clamp(const ScreenBuffer& sb, double& w, double& h, double& x, double& y){
             if(x >= sb.width() || y >= sb.height())
@@ -110,8 +118,10 @@ namespace NAMSP_NAME
             for (auto& e : *c)
                 e->draw(sb);
         }
+        virtual void colorhover(Color col){}
+        virtual void coloractive(Color col){}
+        virtual void colornormal(Color col){}
 
-        virtual void color(Color col){}
         virtual Color color(){return {};}
 
         virtual void text(const std::string&){}

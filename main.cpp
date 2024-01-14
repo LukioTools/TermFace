@@ -1,3 +1,4 @@
+#include "Elements/Button.hpp"
 #include "Elements/Text.hpp"
 #include <cstdio>
 #include <ostream>
@@ -54,7 +55,6 @@ void render_thread(){
         }, render_buffer);
 
         std::cout.flush();
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
     
 }
@@ -68,15 +68,17 @@ int main(int argc, char const *argv[])
         std::clog << "WIDTH: " << WIDTH << std::endl;
         std::clog << "HEIGHT: " << HEIGHT << std::endl;
         std::thread rthr(render_thread);
-        auto e = new Text;
-        e->color({{255,0,0},{255,255,255}});
+        auto e = new Button;
+        e->colornormal({{255,0,0},{255,255,255}});
+        e->colorhover({{0,255,0},{255,255,255}});
+        e->coloractive({{0,0,255},{255,255,255}});
         e->width(100.);
         e->st_width(SizeType::SCR);
         e->height(5);
         e->text("Hello World\nHow are you doing this fine evening!");
 
         body.child(std::unique_ptr<ElementAbstract>(e));        
-        body.color({{255,0,255},{255,255,255}});
+        body.colornormal({{255,0,255},{255,255,255}});
         
         bool run = true;
         KeyboardInputLambda lambda([&](KeyboardInputType c){

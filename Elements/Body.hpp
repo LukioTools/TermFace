@@ -29,7 +29,7 @@ namespace NAMSP_NAME
             if(c)
                 c->push_back(std::move(e));
         }
-        void color(Color col) override {c = col;}
+        void colornormal(Color col) override {c = col;}
         Color color() override {return c;}
 
         void draw(ScreenBuffer &sb) override{

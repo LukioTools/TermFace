@@ -19,12 +19,78 @@ namespace NAMSP_NAME
             CTRL,
             ALT,
             LEFT,
-            RIGHT,
             CENTER,
+            RIGHT,
             SCROLL,
         };
+        enum Action : unsigned char{
+            AUP = UP,
+            ADOWN = DOWN,
+            AHILIGHT = HILIGHT,
+            AHOVER = HOVER,
+        };
+        enum Button : unsigned char{
+            BNONE = 0,
+            BLEFT = LEFT,
+            BCENTER = CENTER,
+            BRIGHT = RIGHT,
+            BSCROLL = SCROLL,
+        };
+        /*
+        struct Mouse {
+            Button b = BLEFT;
+            Action a = AUP;
+            bool alt = false;
+            bool ctrl = false;
+            int x;
+            int y;
+            Mouse(MouseInputType m):  ctrl(m.a.get(CTRL)), alt(m.a.get(ALT)){
+                if(m.a.get(SCROLL)){
+                    b = BSCROLL;
+                    a = m.a.get(UP) ? AUP : ADOWN;
+                    return;
+                }
+                if(m.a.get(HOVER)){
+                    b = BNONE;
+                    a = AHOVER;
+                    return;
+                }
+                if(m.a.get(LEFT))
+                    b = BLEFT;
+                else if(m.a.get(RIGHT))
+                    b = BRIGHT;
+                else if(m.a.get(CENTER))
+                    b = BCENTER;
+                if(m.a.get(HILIGHT))
+                    a = AHILIGHT;
+                else if(m.a.get(DOWN))
+                    a = ADOWN;
+                else if(m.a.get(UP))
+                    a = AUP;
+            }
+        };
+        */
+        Button btn(){
+            if(a.get(SCROLL))
+                return BSCROLL;
+            if(a.get(HOVER))
+                return BNONE;
+            if(a.get(LEFT))
+                return BLEFT;
+            else if(a.get(RIGHT))
+                return BRIGHT;
+            else if(a.get(CENTER))
+                return BCENTER;
+            return BNONE;
+        }
+        Action act(){
+            if(a.get(HOVER))
+                return AHOVER;
+            if(a.get(HILIGHT))
+                return AHILIGHT;
+            return a.get(UP) ? AUP : ADOWN;
+        }
         BitMask<2> a;
-
     };
     
     class MouseInput : public EventListener<void, MouseInputType>

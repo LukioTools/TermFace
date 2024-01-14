@@ -17,7 +17,7 @@ namespace NAMSP_NAME
         SizeType pyt = ABS; // pos y type
         SizeType wt = ABS; // width type
         SizeType ht = ABS; // height type
-        Color c;
+        Color color_normal;
         size_t zi = 1; //z index
     public:
         void z_index(std::size_t z) override{
@@ -165,8 +165,10 @@ namespace NAMSP_NAME
                 }
         }
 
-        void color(Color col) override {c = col;}
-        Color color() override {return c;}
+        void colornormal(Color col) override {color_normal = col;}
+        Color color() override {
+            return color_normal;
+        }
 
 
         Element(/* args */) {}
