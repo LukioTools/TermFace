@@ -39,16 +39,16 @@ namespace NAMSP_NAME
             fds.events = POLLIN;
             while (state.run) {
                 
-                while (true) {  //wait until has char
-                    if(!state.run)
-                        return;
-                    int ret = poll(&fds, 1, 0);
-                    if(ret == 1)
-                        break;
-                    if(ret == -1)
-                        std::cin.clear();
-                    std::this_thread::sleep_for(std::chrono::milliseconds(16));
-                }
+                //while (true) {  //wait until has char
+                //    if(!state.run)
+                //        return;
+                //    int ret = poll(&fds, 1, 0);
+                //    if(ret == 1)
+                //        break;
+                //    if(ret == -1)
+                //        std::cin.clear();
+                //    std::this_thread::sleep_for(std::chrono::milliseconds(16));
+                //}
 
 
                 int c = is.get();
@@ -58,11 +58,11 @@ namespace NAMSP_NAME
                 }
                 
                 state.buffer.push_back(c);
-                relööp:
+                redo:
                 for (auto& e : parsers) {
                     if(e)
                         if(e(state.buffer))
-                            goto relööp;
+                        goto redo;
                 }
             }
             #if defined(DEBUG)

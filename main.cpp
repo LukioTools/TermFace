@@ -75,7 +75,7 @@ int main(int argc, char const *argv[])
         e->width(100.);
         e->st_width(SizeType::SCR);
         e->height(5);
-        e->text("Hello World\nHow are you doing this fine evening!");
+        e->text("Hello World\nHow \nare \nyou \ndoing \nthis fine evening!");
 
         body.child(std::unique_ptr<ElementAbstract>(e));        
         body.colornormal({{255,0,255},{255,255,255}});

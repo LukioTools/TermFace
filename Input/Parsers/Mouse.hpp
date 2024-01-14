@@ -1,5 +1,6 @@
 #pragma once
 #include "Parser.hpp"
+#include <iostream>
 #include <string>
 #include <vector>
 #include "../../Events/MouseInput.hpp"
@@ -10,8 +11,28 @@ namespace NAMSP_NAME
 {
     namespace Parsers
     {
+        static int read_int(std::vector<char>& vec, int& index, char sep = ';'){
+            std::string buffer;
+            do {
+                index++;
+                if(index >= vec.size())
+                    return -1;
+                if(vec[index] == sep)
+                    break;
+                if(vec[index] < '0' || vec[index] > '9')
+                    return -1;
+                buffer+=vec[index];
+            }while (true);
+            return std::stoi(buffer);
+        }
         static Parser Mouse = [](std::vector<char>& vec){
             MouseInputType m;
+            for (size_t i = 0; i < vec.size(); i++)
+            {
+                auto n =  vec[i];
+                std::clog << std::dec << (int) n << "  0x" << std::hex << (int) n << "  0b" << std::bitset<8>(n) << "  char: " << (char) n << std::endl;
+            }
+            std::clog << std::endl;
             if(vec.size() < 9)
                 return false;
 
@@ -24,6 +45,36 @@ namespace NAMSP_NAME
 
             int current_index = 2;
             int iaction = -1; //parse this shit later
+            iaction = read_int(vec, current_index);
+            if(iaction == -1)
+                return false;
+            m.x = read_int(vec, current_index) -1;
+            if(m.x == -1)
+                return false;
+            
+            {
+                std::string buffer;
+                do {
+                    current_index++;
+                    if(current_index >= vec.size())
+                        return false;
+                    if(vec[current_index] == 'M' || vec[current_index] == 'm')
+                        break;
+                    if(vec[current_index] < '0' || vec[current_index] > '9')
+                        return false;
+                    buffer+=vec[current_index];
+                }while (true);
+                m.y  = std::stoi(buffer) -1;
+            }
+
+            
+
+
+
+
+
+
+            /*
             {
                 std::string action;
                 while (true) {
@@ -97,6 +148,7 @@ namespace NAMSP_NAME
                     return false;                    
                 }
             }
+            */
 
             {
                 //parse iaction

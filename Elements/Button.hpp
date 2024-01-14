@@ -70,11 +70,11 @@ namespace NAMSP_NAME
         void coloractive(Color c) override{
             color_active = c;
         }
-        Color color() override{
-            if(hover())
-                return color_hover;
+        Color color() override{ //order matters
             if(active())
                 return color_active;
+            if(hover())
+                return color_hover;
             return color_normal;
         }
 
