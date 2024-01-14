@@ -28,6 +28,8 @@ using namespace::tui;
 
 bool render_run = true;
 void render_thread(){
+    refresh_screen_size();
+    refresh_screen_buffers();
     while (render_run)
     {
         refresh_screen_size();

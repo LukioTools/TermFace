@@ -9,6 +9,6 @@ namespace NAMSP_NAME
 {
     inline void refresh_screen_buffers(int = 0){
         render_buffer.alloc(WIDTH, HEIGHT);
-        display_buffer.alloc(WIDTH, HEIGHT).clear();
+        display_buffer.alloc(WIDTH, HEIGHT);
     }
 }
