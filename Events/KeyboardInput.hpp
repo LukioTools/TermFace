@@ -3,10 +3,36 @@
 #include "EventListener.hpp"
 #include <iostream>
 #include <iterator>
+#include <ostream>
 #include <vector>
 namespace NAMSP_NAME
 {
-    typedef char KeyboardInputType;
+    struct KeyboardInputType
+    {
+        int ch = ' ';
+
+        void operator=(int c){
+            ch = c;
+        }
+        friend std::ostream& operator<<(std::ostream& os, KeyboardInputType k){
+            auto p = reinterpret_cast<char*>(&k.ch);
+            for (size_t i = 0; i < sizeof(ch); i++)
+            {
+                char c = p[i];
+                if(c == 0)
+                    break;
+                os << c;
+            }
+            return os;
+        }
+        operator int(){
+            return ch;
+        }
+        KeyboardInputType(){}
+        KeyboardInputType(int c): ch(c){}
+    };
+    
+    //typedef char KeyboardInputType;
     class KeyboardInput : public EventListener<void, KeyboardInputType>
     {
     private:
