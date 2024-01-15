@@ -1,5 +1,4 @@
-#include "Elements/Button.hpp"
-#include "Elements/Text.hpp"
+#include "Elements/TextField.hpp"
 #include <cstdio>
 #include <ostream>
 #define EventListenerDEBUG 1
@@ -68,14 +67,15 @@ int main(int argc, char const *argv[])
         std::clog << "WIDTH: " << WIDTH << std::endl;
         std::clog << "HEIGHT: " << HEIGHT << std::endl;
         std::thread rthr(render_thread);
-        auto e = new Button;
+        auto e = new TextField;
         e->colornormal({{255,0,0},{255,255,255}});
         e->colorhover({{0,255,0},{255,255,255}});
         e->coloractive({{0,0,255},{255,255,255}});
         e->width(100.);
         e->st_width(SizeType::SCR);
         e->height(5);
-        e->text("Hello World\nHow \nare \nyou \ndoing \nthis fine evening!");
+        e->text("Write here: ");
+
 
         body.child(std::unique_ptr<ElementAbstract>(e));        
         body.colornormal({{255,0,255},{255,255,255}});
@@ -84,6 +84,9 @@ int main(int argc, char const *argv[])
         KeyboardInputLambda lambda([&](KeyboardInputType c){
                 if(c == 1 || c == 4)
                     run = false;
+                
+                if(e->active())
+                    return;
                 if(c == 'd')
                     e->posx(e->abs_posx()+1);
                 if(c == 'a')

@@ -1,4 +1,5 @@
 #pragma once
+#include "ElementAttribute.hpp"
 #include "Text.hpp"
 #include "../Events/MouseInput.hpp"
 #include <iostream>
@@ -6,22 +7,18 @@
 namespace NAMSP_NAME
 {
 
-    class Button : public Text, public MouseInput  
+    class Button : public Text, public MouseInput, public ElementAttribute
     {
     protected:
         Color color_hover;
         Color color_active;
         BitMask<1> attr;
-        enum ElementAttribute{
-            HOVER,
-            ACTIVE,
-        };
             //maby virtual
-        bool hover(){
+        bool hover() override{
             return attr.get(HOVER);
         }
             //maby virtual
-        bool active(){
+        bool active() override {
             return attr.get(ACTIVE);
         }
         virtual void onClick(MouseInputType m){}

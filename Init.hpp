@@ -27,7 +27,7 @@ namespace NAMSP_NAME
             //set the old rdbuf
         std::clog.rdbuf(buf_clog);
         std::cerr.rdbuf(buf_cerr);
-        std::cout << norm_buffer <<disable_mouse(SET_SGR_EXT_MODE_MOUSE) << disable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
+        std::cout << norm_buffer << cursor_visible <<disable_mouse(SET_SGR_EXT_MODE_MOUSE) << disable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
 
             //fcntl
         //fcntl(STDIN_FILENO, F_SETFL, fcntl_flags);
@@ -41,7 +41,7 @@ namespace NAMSP_NAME
             //swap the rdbuf (it returns the old one)
         buf_clog =  std::clog.rdbuf(os.rdbuf());
         buf_cerr =  std::cerr.rdbuf(os.rdbuf());
-        std::cout <<  alt_buffer<<enable_mouse(SET_SGR_EXT_MODE_MOUSE) << enable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
+        std::cout <<  alt_buffer << cursor_invisible<<enable_mouse(SET_SGR_EXT_MODE_MOUSE) << enable_mouse(SET_ANY_EVENT_MOUSE) << std::endl;
 
             //fcntl
         //fcntl_flags = fcntl(STDIN_FILENO, F_GETFL, 0);

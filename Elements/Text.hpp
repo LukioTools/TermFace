@@ -48,7 +48,6 @@ namespace NAMSP_NAME
                                 ch = ' ';
                             }
                         }
-
                         e.p.ch = ch;
                         e.p.c = color();
                         e.z_index = z_index();
