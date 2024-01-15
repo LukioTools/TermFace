@@ -36,17 +36,14 @@ void render_thread(){
     {
         refresh_screen_size();
         refresh_screen_buffers();
-        render_buffer.fill({Pixel{
-            {{0,0,0},{200,200,200}},
-            ' ',
-        }, 0});
+        //render_buffer.fill({Pixel{
+        //    {{0,0,0},{200,200,200}},
+        //    ' ',
+        //}, 0});
 
         body.draw(render_buffer);
 
-
-
         display_buffer.difference([](ScreenBuffer& sba, const ScreenBuffer& sbb, size_t x, size_t y){
-            //std::clog << "diff: " << x << '/' << y << std::endl;
             auto& a = sba.get(x,y);
             auto& b = sbb.get(x,y);
             a=b;

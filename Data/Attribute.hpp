@@ -78,6 +78,11 @@ namespace NAMSP_NAME{
             return bm.mask[0] != a.bm.mask[0];
         }
 
+        void clear(){
+            bm.mask[0] = 0;
+            //bm.clear();
+        }
+
         Attribute(/* args */) {}
         Attribute(const std::initializer_list<Attributes>& ls) {
             for (auto e : ls) 

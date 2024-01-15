@@ -22,10 +22,10 @@ namespace NAMSP_NAME
         bool hover() override{
             return attr.get(HOVER);
         }
-        void event(Direction d) override{
+        void event(ArrowInputType d) override{
             if(!active())
                 return;
-            switch (d)
+            switch (d.dir())
             {
             case Direction::LEFT:
                 if(cursor > 0)

@@ -13,6 +13,13 @@ struct BitMask
 
     unsigned char mask[ByteSize] = {0};
 
+    inline void clear(){
+        for (size_t i = 0; i < ByteSize; i++)
+        {
+            mask[ByteSize] = 0;
+        }
+    }
+
     inline constexpr size_t nbits() const noexcept {
         return ByteSize * sizeof(unsigned char) * 8;
     }
