@@ -15,6 +15,9 @@ namespace NAMSP_NAME
         Color color_active;
         unsigned int cursor;
         BitMask<1> attr;
+        bool is_word(char c){
+            return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+        }
     public:
         bool active() override{
             return attr.get(ACTIVE);
@@ -28,12 +31,28 @@ namespace NAMSP_NAME
             switch (d.dir())
             {
             case Direction::LEFT:
-                if(cursor > 0)
+                if(cursor > 0){
                     cursor--;
+                    if(d.ctrl()){
+                        while (cursor > 0) {
+                            if(!is_word(txt[cursor]))
+                                break;
+                            cursor--;
+                        }
+                    }
+                }
                 break;
             case Direction::RIGHT:
-                if(cursor < txt.size())
+                if(cursor < txt.size()){
                     cursor++;
+                    if(d.ctrl()){
+                        while (cursor < txt.size()) {
+                            if(!is_word(txt[cursor]))
+                                break;
+                            cursor++;
+                        }
+                    }
+                }
                 break;
             case Direction::UP:
             case Direction::DOWN:

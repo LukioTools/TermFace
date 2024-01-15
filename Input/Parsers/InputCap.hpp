@@ -33,7 +33,7 @@ namespace NAMSP_NAME
                 else{
                     if(vec.size() < 3)
                         return false;
-                    if(vec[2] == '<' || (vec[2] >= 'A' && vec[2] <= 'D'))
+                    if(vec[2] == '<' || (vec[2] >= 'A' && vec[2] <= 'D') || vec[2] == '1')
                         return false;
                     else{
                         //std::cout << "clear: " << vec[2] << "\n";

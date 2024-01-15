@@ -13,6 +13,7 @@ namespace NAMSP_NAME
         static Parser ArrowKey = [](std::vector<char>& vec){
             ArrowInputType out;
             int n_remove = 3;
+            //std::clog << "VEC SIZE: " << vec.size() << std::endl;
             if(vec.size() < 3)
                 return false;
             if(vec[0] != '\e')
@@ -27,6 +28,21 @@ namespace NAMSP_NAME
             case 'D':
                 out.dir(static_cast<Direction>(vec[2]-'A'));
                 n_remove  = 3;
+                break;
+            case '1':
+                if(vec.size() < 6){
+                    //std::clog << "if(vec.size() < 6){" << std::endl;
+                    return false;
+                }
+                if(vec[3] != ';'){
+                    //std::clog << "if(vec[3] != ';'){" << std::endl;
+                    return false;
+                }
+                out.shift(vec[4] == '2');
+                out.ctrl(vec[4] == '5');
+                //char shift_ctrl = vec[4];
+                out.dir(static_cast<Direction>(vec[5]-'A'));
+                n_remove  = 6;
                 break;
             default:
                 return false;
