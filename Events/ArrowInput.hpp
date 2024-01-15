@@ -10,8 +10,8 @@ namespace NAMSP_NAME
     enum Direction : char{
         UP,
         DOWN,
-        LEFT,
         RIGHT,
+        LEFT,
     };
 
     struct ArrowInputType{
