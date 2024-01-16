@@ -71,7 +71,7 @@ int main(int argc, char const *argv[])
         e->width(100.);
         e->st_width(SizeType::SCR);
         e->height(5);
-        e->text("Write here: ");
+        e->text(std::string("Write here: "));
 
 
         body.child(std::unique_ptr<ElementAbstract>(e));        
@@ -105,8 +105,8 @@ int main(int argc, char const *argv[])
                 auto a  = render_buffer.get(m.x, m.y);
                 auto b  = display_buffer.get(m.x, m.y);
                 std::clog << "a!=b: " << ( a!=b ? "true" : "false") << std::endl;
-                std::clog << "a.p.ch: '" << a.p.ch << "' (aka: '" << (char) a.p.ch << "')" <<    std::endl;
-                std::clog << "b.p.ch: '" << b.p.ch << "' (aka: '" << (char) b.p.ch << "')" <<    std::endl;
+                std::clog << "a.p.ch: '" << a.p.ch.getInt() << "' (aka: '" << a.p.ch << "')" <<    std::endl;
+                std::clog << "b.p.ch: '" << b.p.ch.getInt() << "' (aka: '" << b.p.ch << "')" <<    std::endl;
             }
         });
 

@@ -1,13 +1,50 @@
 #pragma once
+#include <algorithm>
+#include <string>
+#include <vector>
+
+#include "../Events/KeyboardInput.hpp"
 #include "Element.hpp"
 #include "ElementAbstract.hpp"
 
 namespace NAMSP_NAME
 {
+    struct TextStr : public std::vector<KeyboardInputType>
+    {
+    public:
+        //operator std::string() const {
+        //    std::string out;
+        //    for (size_t i = 0; i < size(); i++)
+        //    {
+        //        auto& e = this->operator[](i);
+        //        out+= e;
+        //    }
+        //    return out;
+        //}
+        std::string str() const{
+            std::string out;
+            for (size_t i = 0; i < size(); i++)
+            {
+                auto& e = this->operator[](i);
+                out+= e;
+            }
+            return out;
+        }
+        TextStr& operator+=(const KeyboardInputType k){
+            push_back(k);
+            return *this;
+        }
+
+        friend std::string& operator+=(std::string& str, const TextStr& t){
+            str+=t;
+            return str;
+        }
+    };
+    
     class Text : public Element
     {
     protected:
-        std::string txt; // maby implement 8 byte string
+        TextStr txt;
     public:
         TextPadding t;
         TextPadding b;
@@ -17,10 +54,28 @@ namespace NAMSP_NAME
         TextBreak text_break;
 
         void text(const std::string& str) override{
-            txt = str;
+            for (size_t i = 0; i < str.size(); i++)
+            {
+                if(str[i] & 0b10000000){
+                    KeyboardInputType k = str[i];
+                    int n_extra_bytes = 0;
+                    int index = 1;
+                    while (str[i] & (0b10000000 >> index++))
+                        n_extra_bytes++;
+                    for (size_t j = 0; j < std::min(n_extra_bytes, 3); j++)
+                    {
+                        k+=str[i];
+                        i++;
+                    }
+                    txt+=k;
+                }
+                else
+                    txt+=str[i];
+            }
+            
         }
         std::string text() const override{
-            return txt;
+            return txt.str();
         }
         void draw(ScreenBuffer& sb) override{
             double w = width();
@@ -39,7 +94,7 @@ namespace NAMSP_NAME
                         if(e.z_index > z_index()){
                             continue;
                         }
-                        auto ch = ' ';
+                        KeyboardInputType ch = ' ';
                         if( !line_break && txt_index < txt.size()){
                             ch = txt[txt_index];
                             txt_index++;

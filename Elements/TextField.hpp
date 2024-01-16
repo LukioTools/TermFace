@@ -7,6 +7,7 @@
 #include "../Events/ArrowInput.hpp"
 #include "../Data/BitMask.hpp"
 #include <iostream>
+#include <string>
 namespace NAMSP_NAME
 {
     class TextField : public Text, public MouseInput, public KeyboardInput, public ArrowInput, public ElementAttribute
@@ -16,7 +17,7 @@ namespace NAMSP_NAME
         Color color_active;
         unsigned int cursor;
         BitMask<1> attr;
-        bool is_word(char c){
+        bool is_word(KeyboardInputType c){
             return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
         }
     public:
@@ -72,10 +73,9 @@ namespace NAMSP_NAME
                 }
                 else if(c == 23) { // ctrl backspace aka EOT
                     if(cursor > 0){
-                        char before = cursor < txt.size() ? txt[cursor] : ' ';
+                        auto before = cursor < txt.size() ? txt[cursor] : ' ';
                         while (cursor > 0) {
                             cursor--;
-                            std::clog << (int) txt[cursor] << '/' << (int) before << "   :" << (!is_word(txt[cursor]) && txt[cursor] != before) << std::endl; 
                             if(!is_word(txt[cursor]) && txt[cursor] != before)
                                 break;
                             before = txt[cursor];
@@ -94,7 +94,6 @@ namespace NAMSP_NAME
                     cursor+=datan;
                 }
                 else{
-                    txt.insert(it, c);
                     cursor++;
 
                 }
@@ -163,7 +162,7 @@ namespace NAMSP_NAME
                         if(e.z_index > z_index()){
                             continue;
                         }
-                        auto ch = ' ';
+                        KeyboardInputType ch = ' ';
                         if((txt_index == cursor && !line_break && !cursor_printed)){
                             e.p.a.set(Attribute::UNDERLINE, true);
                             cursor_printed = true;

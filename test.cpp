@@ -18,27 +18,36 @@
 #include <termios.h>
 #include <vector>
 
-int x = tui::init(0, 0);
-tui::InputManager man;
+
+//int x = tui::init(0, 0);
 static termios newt, oldt;
 int main(int argc, char const *argv[])
 {
+    tui::KeyboardInputType k;
+    //k = 'a';
+    //std::cout << k << std::endl;
+    auto e = "€";   //11305698
+    auto hex = 0xAC82E2;
+    k = hex;
+    std::cout << k << " is eq: " << e << ": " << (k == e? "ture" : "false") << std::endl;
+
     {
+        /*
+        tui::InputManager man;
         bool run = true;
 
         tui::KeyboardInputLambda kl = [&](tui::KeyboardInputType k){
             std::clog << "GOT: " << k << std::endl;
-            if(k[0] == 1 && k[2] == 0){
+            if(k == 1){
                 run = false;
             }
         };
         while (run) {
             std::this_thread::sleep_for(std::chrono::milliseconds(15));
         }
-        std::clog << "EXITTED FOR SOME REASON... run::" << (run ? "true" : "false") << std::endl;
-
+        */
     }
     
-    tui::deinit();
+    //tui::deinit();
     return 0;
 }

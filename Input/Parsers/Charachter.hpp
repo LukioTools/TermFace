@@ -40,7 +40,7 @@ namespace NAMSP_NAME
                 {
                     if(i+1 >= vec.size())
                         return false;
-                    k << vec[i+1];
+                    k += vec[i+1];
                 }
                 std::clog << "Success";
                 vec.erase(vec.begin(), vec.begin()+n_extra_bytes+1);
