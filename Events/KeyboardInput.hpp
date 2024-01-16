@@ -1,36 +1,101 @@
 #pragma once
 #include "../NAMSP_NAME.hpp"
 #include "EventListener.hpp"
+#include <cstring>
 #include <iostream>
 #include <iterator>
 #include <ostream>
 #include <vector>
 namespace NAMSP_NAME
 {
-    struct KeyboardInputType
-    {
-        int ch = ' ';
-
-        void operator=(int c){
-            ch = c;
+struct KeyboardInputType
+{
+    char ch[4] = {0};
+    KeyboardInputType& operator<<(char c){  //automated construction of the charachters
+        for (size_t i = 0; i < sizeof(ch); i++)
+        {
+            if(ch[i] != 0)
+                continue;
+            ch[i] = c;
+            break;
         }
-        friend std::ostream& operator<<(std::ostream& os, KeyboardInputType k){
-            auto p = reinterpret_cast<char*>(&k.ch);
-            for (size_t i = 0; i < sizeof(ch); i++)
-            {
-                char c = p[i];
-                if(c == 0)
-                    break;
-                os << c;
-            }
-            return os;
+        return *this;
+    }
+    bool empty(){
+        return getInt() == 0;
+    }
+    int nbytes(){
+        int ret = 0;
+        for (size_t i = 0; i < sizeof(ch) && ch[i] != 0; i++)
+            ret++;
+        return ret;
+    }
+    char operator[](size_t index){
+        if(index >= sizeof(ch))
+            throw std::out_of_range("KeyboardInputType::[]::index >= sizeof(ch)");
+        return ch[index]; 
+    }
+    bool operator!=(KeyboardInputType k){
+        return memcmp(ch, k.ch, sizeof(ch)) != 0;
+    }
+    bool operator==(KeyboardInputType k){
+        return memcmp(ch, k.ch, sizeof(ch)) != 0;
+    }
+    bool operator!=(int k){
+        return memcmp(ch, &k, sizeof(ch)) != 0;
+    }
+    bool operator==(int k){
+        return memcmp(ch, &k, sizeof(ch)) != 0;
+    }
+    bool operator<(KeyboardInputType k){
+        return getInt() < k.getInt();
+    }
+    bool operator>(KeyboardInputType k){
+        return getInt() > k.getInt();
+    }
+    bool operator<=(KeyboardInputType k){
+        return getInt() <= k.getInt();
+    }
+    bool operator>=(KeyboardInputType k){
+        return getInt() >= k.getInt();
+    }
+    int getInt(){
+        return *reinterpret_cast<int*>(ch);
+    } 
+    friend std::ostream& operator<<(std::ostream& os, KeyboardInputType k){
+        auto p = reinterpret_cast<char*>(&k.ch);
+        for (size_t i = 0; i < sizeof(ch); i++)
+        {
+            char c = p[i];
+            if(c == 0)
+                break;
+            os << c;
         }
-        operator int(){
-            return ch;
-        }
-        KeyboardInputType(){}
-        KeyboardInputType(int c): ch(c){}
-    };
+        return os;
+    }
+    inline void clear(){
+        memset(ch, 0, sizeof(ch));
+    }
+    inline wchar_t wchar(){
+        wchar_t wc = 0;
+        memcpy(&wc, ch, std::min(sizeof(wc), sizeof(ch)));
+        return wc;
+    }
+    inline void wchar(wchar_t wc){
+        clear();
+        memcpy(ch, &wc, std::min(sizeof(wc), sizeof(ch)));
+    }
+    inline void operator=(char c){
+        clear();
+        ch[0] = c;
+    }
+    inline void operator=(wchar_t c){
+        wchar(c);
+    }
+    KeyboardInputType(){}
+    KeyboardInputType(char c){this->operator=(c);}
+    KeyboardInputType(wchar_t c){this->operator=(c);}
+};
     
     //typedef char KeyboardInputType;
     class KeyboardInput : public EventListener<void, KeyboardInputType>

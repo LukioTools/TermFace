@@ -30,6 +30,13 @@ namespace NAMSP_NAME
         bool run = true;
         static std::vector<Parser> parsers;
         static std::chrono::microseconds delay_between_getch;
+        bool call_parsers(){
+            for (auto e : parsers) {
+                if(e && e(buffer))
+                    return true;
+            }
+            return false;
+        }
         static void input_loop(std::istream& is, InputManager& state){
             #if defined(DEBUG)
             std::clog << "Starting input lööp!" << std::endl;
@@ -38,32 +45,13 @@ namespace NAMSP_NAME
             fds.fd = STDIN_FILENO; /* this is STDIN */
             fds.events = POLLIN;
             while (state.run) {
-                
-                //while (true) {  //wait until has char
-                //    if(!state.run)
-                //        return;
-                //    int ret = poll(&fds, 1, 0);
-                //    if(ret == 1)
-                //        break;
-                //    if(ret == -1)
-                //        std::cin.clear();
-                //    std::this_thread::sleep_for(std::chrono::milliseconds(16));
-                //}
-
-
                 int c = is.get();
                 if(c == -1){
                     is.clear();
                     continue;
                 }
-                
                 state.buffer.push_back(c);
-                redo:
-                for (auto& e : parsers) {
-                    if(e)
-                        if(e(state.buffer))
-                        goto redo;
-                }
+                while (state.call_parsers()) {}
             }
             #if defined(DEBUG)
             std::clog << "Exitting input lööp!" << std::endl;
