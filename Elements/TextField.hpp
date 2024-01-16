@@ -6,6 +6,7 @@
 #include "../Events/MouseInput.hpp"
 #include "../Events/ArrowInput.hpp"
 #include "../Data/BitMask.hpp"
+#include <iostream>
 namespace NAMSP_NAME
 {
     class TextField : public Text, public MouseInput, public KeyboardInput, public ArrowInput, public ElementAttribute
@@ -68,6 +69,29 @@ namespace NAMSP_NAME
                         txt.erase(it-1);
                         cursor--;
                     }
+                }
+                else if(c == 23) { // ctrl backspace aka EOT
+                    if(cursor > 0){
+                        char before = cursor < txt.size() ? txt[cursor] : ' ';
+                        while (cursor > 0) {
+                            cursor--;
+                            std::clog << (int) txt[cursor] << '/' << (int) before << "   :" << (!is_word(txt[cursor]) && txt[cursor] != before) << std::endl; 
+                            if(!is_word(txt[cursor]) && txt[cursor] != before)
+                                break;
+                            before = txt[cursor];
+                        }
+                        auto beg = txt.begin()+cursor;
+                            // just in case
+                        if(it < txt.end() && beg >= txt.begin() && beg < txt.end()){
+                            txt.erase(beg, it);
+                        }
+                    }
+                }
+                else if(c == 9){ // TAB
+                    constexpr const char* data  = "    ";
+                    constexpr int datan  = 4;
+                    txt.insert(it, data, data+datan);
+                    cursor+=datan;
                 }
                 else{
                     txt.insert(it, c);

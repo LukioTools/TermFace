@@ -74,7 +74,7 @@ int main(int argc, char const *argv[])
     while (true) {
         char n = std::cin.get();
         KeyboardInputType k = n;
-        std::cout << std::dec <<  n << "  0x" << std::hex << n << "  0b" << std::bitset<8>(n) << "  char: " << (char) n << std::endl;
+        std::cout << std::dec <<  (int ) n << "  0x" << std::hex <<(int )  n << "  0b" << std::bitset<8>(n) << "  char: " << (char) n << std::endl;
         if(n == 1)
             break;
         if((n & 0b10000000)){
