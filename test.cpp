@@ -27,6 +27,16 @@ struct KeyboardInputType
         }
         return *this;
     }
+
+    bool operator!=(KeyboardInputType k){
+        return memcmp(ch, k.ch, sizeof(ch)) == false;
+    }
+    bool operator==(KeyboardInputType k){
+        return !this->operator!=(k);
+    }
+    operator int (){
+        return *reinterpret_cast<int*>(ch);
+    } 
     friend std::ostream& operator<<(std::ostream& os, KeyboardInputType k){
         auto p = reinterpret_cast<char*>(&k.ch);
         for (size_t i = 0; i < sizeof(ch); i++)
